@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trailer Docs">
+<meta name="theme-color" content="#1b4965">
+<title>Trailer Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#f3f1ec; --surface:#ffffff; --surface-2:#eeece5;
+  --ink:#1e2a30; --muted:#5d6b72; --line:#ded9cf;
+  --accent:#1b4965; --accent-soft:#e2ebf0; --link:#1b6a8e; --tap:#2a6f8e;
+  --warn:#9a6608; --warn-bg:#fbf0d4; --warn-line:#e6c877;
+  --note:#2a6f8e; --note-bg:#e7eff4; --note-line:#bcd4e0;
+  --done:#3f7a52; --done-bg:#e6f0e7;
+  --shadow:0 1px 2px rgba(20,30,35,.06),0 4px 14px rgba(20,30,35,.05);
+  --oncolor:#ffffff;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11171b; --surface:#1a2228; --surface-2:#222d34;
+  --ink:#e7ecee; --muted:#9aa7ae; --line:#2c383f;
+  --accent:#7bb0cc; --accent-soft:#1d2e39; --link:#8fc3dd; --tap:#8fc3dd;
+  --warn:#e6b752; --warn-bg:#2a2314; --warn-line:#5a4a1e;
+  --note:#8fc3dd; --note-bg:#152530; --note-line:#2c414d;
+  --done:#79c091; --done-bg:#16241a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);
+  --oncolor:#06131b;
+}}
+:root[data-theme="dark"]{
+  --bg:#11171b; --surface:#1a2228; --surface-2:#222d34;
+  --ink:#e7ecee; --muted:#9aa7ae; --line:#2c383f;
+  --accent:#7bb0cc; --accent-soft:#1d2e39; --link:#8fc3dd; --tap:#8fc3dd;
+  --warn:#e6b752; --warn-bg:#2a2314; --warn-line:#5a4a1e;
+  --note:#8fc3dd; --note-bg:#152530; --note-line:#2c414d;
+  --done:#79c091; --done-bg:#16241a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);
+  --oncolor:#06131b;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Barlow",system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.55;
+  -webkit-text-size-adjust:100%;}
+a{color:var(--link);}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px;}
+
+/* ---------- top bars ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:var(--accent);color:#fff;box-shadow:var(--shadow);}
+:root[data-theme="dark"] .bar,:root:not([data-theme="light"]) .bar{color:var(--oncolor);}
+.bar-row{display:flex;align-items:center;gap:12px;padding:11px 16px;max-width:720px;margin:0 auto;}
+.bar h1{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:20px;
+  letter-spacing:.3px;margin:0;text-transform:uppercase;line-height:1.05;}
+.bar .build{margin-left:auto;text-align:right;line-height:1.2;white-space:nowrap;}
+.bar .build .v{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;}
+.bar .build .d{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;opacity:.78;}
+.backbtn{appearance:none;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);
+  color:inherit;font:inherit;font-size:19px;line-height:1;width:38px;height:38px;border-radius:10px;
+  cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;}
+.backbtn:active{transform:scale(.95);}
+.bar .mtitle{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:18px;
+  text-transform:uppercase;letter-spacing:.3px;line-height:1;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.reset{appearance:none;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);
+  color:inherit;font:inherit;font-size:13px;padding:6px 11px;border-radius:999px;cursor:pointer;
+  min-height:34px;white-space:nowrap;}
+.count{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;white-space:nowrap;opacity:.95;}
+.progress{height:3px;background:rgba(255,255,255,.22);}
+.progress>i{display:block;height:100%;width:0%;background:#fff;transition:width .25s ease;}
+:root[data-theme="dark"] .progress>i,:root:not([data-theme="light"]) .progress>i{background:var(--oncolor);}
+
+/* segmented view tabs */
+.tabs{display:flex;gap:0;background:var(--surface-2);border-bottom:1px solid var(--line);
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 60px);z-index:15;}
+.tabs-in{display:flex;gap:6px;max-width:720px;margin:0 auto;width:100%;padding:8px 16px;}
+.tab{flex:1;appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+  font:inherit;font-size:14px;font-weight:600;padding:8px 4px;border-radius:9px;cursor:pointer;
+  text-align:center;min-height:38px;}
+.tab.active{background:var(--accent);color:var(--oncolor);border-color:var(--accent);}
+
+/* ---------- hub ---------- */
+.hero{padding:26px 0 8px;}
+.hero .kicker{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);}
+.hero h2{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:30px;
+  margin:2px 0 4px;color:var(--accent);letter-spacing:.3px;}
+.hero p{margin:0;color:var(--muted);font-size:15px;}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;
+  padding:18px 0 40px;}
+.tile{display:flex;flex-direction:column;gap:6px;text-align:left;text-decoration:none;
+  background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:13px;padding:15px 15px 16px;box-shadow:var(--shadow);color:var(--ink);
+  min-height:112px;cursor:pointer;}
+.tile:active{transform:scale(.985);}
+.tile.soon{border-left-color:var(--line);opacity:.72;cursor:default;}
+.tile .tt{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:18px;
+  color:var(--accent);letter-spacing:.2px;}
+.tile.soon .tt{color:var(--ink);}
+.tile .ts{font-size:13px;color:var(--muted);flex:1;}
+.pill{align-self:flex-start;font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent);}
+.tile.soon .pill{background:var(--surface-2);color:var(--muted);}
+
+/* ---------- reading (Guide / Illustrated) ---------- */
+.reading{counter-reset:sec;padding-bottom:70px;}
+.reading>*:first-child{margin-top:2px;}
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:var(--shadow);margin:16px 0 6px;overflow:hidden;}
+.toc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:13px 16px;
+  font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;font-size:14px;color:var(--accent);}
+.toc>summary::-webkit-details-marker{display:none;}
+.toc>summary .chev{margin-left:auto;transition:transform .2s;color:var(--muted);}
+.toc[open]>summary .chev{transform:rotate(180deg);}
+.toc ol{margin:0;padding:2px 0 10px;list-style:none;counter-reset:t;}
+.toc li{counter-increment:t;}
+.toc a{display:flex;gap:11px;padding:8px 16px;text-decoration:none;color:var(--ink);
+  font-size:15.5px;border-top:1px solid var(--line);}
+.toc li:first-child a{border-top:none;}
+.toc a::before{content:counter(t);font-family:"IBM Plex Mono",monospace;font-weight:600;
+  color:var(--accent);min-width:20px;text-align:right;}
+.doc h1{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:25px;letter-spacing:.2px;
+  color:var(--accent);margin:34px 0 4px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  text-wrap:balance;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 120px);}
+.doc h1::before{counter-increment:sec;content:counter(sec) "  ";color:var(--muted);
+  font-family:"IBM Plex Mono",monospace;font-size:18px;font-weight:600;}
+.doc h2{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:19px;color:var(--accent);
+  margin:22px 0 2px;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 120px);}
+.doc p{margin:11px 0;}
+.doc ol,.doc ul{margin:11px 0;padding-left:0;}
+.doc ol{counter-reset:li;list-style:none;}
+.doc ol>li{counter-increment:li;position:relative;padding-left:40px;margin:9px 0;}
+.doc ol>li::before{content:counter(li);position:absolute;left:0;top:1px;
+  font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:14px;color:var(--oncolor);
+  background:var(--accent);width:25px;height:25px;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.doc ul{list-style:none;}
+.doc ul>li{position:relative;padding-left:24px;margin:7px 0;}
+.doc ul>li::before{content:"";position:absolute;left:6px;top:.68em;width:7px;height:7px;border-radius:2px;background:var(--accent);}
+.doc li>p{margin:0;}
+.doc img.photo{display:block;max-width:100%;border-radius:10px;margin:12px 0;border:1px solid var(--line);}
+.reading:not(.show-img) .doc img.photo{display:none;}
+.callout{border-radius:10px;padding:12px 15px 12px 14px;margin:15px 0;border-left:4px solid var(--warn-line);
+  background:var(--warn-bg);box-shadow:var(--shadow);}
+.callout.note{border-left-color:var(--note-line);background:var(--note-bg);}
+.callout .clabel{display:block;font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;
+  text-transform:uppercase;letter-spacing:.6px;font-size:13px;color:var(--warn);margin-bottom:2px;}
+.callout.note .clabel{color:var(--note);}
+.callout p{margin:0;}
+.photobanner{background:var(--note-bg);border:1px dashed var(--note-line);border-radius:10px;
+  padding:11px 14px;margin:14px 0;color:var(--note);font-size:14.5px;}
+.totop{display:block;text-align:center;margin:24px auto 0;font-size:14px;color:var(--muted);text-decoration:none;}
+
+/* ---------- checklist ---------- */
+.checklist{padding:6px 0 70px;}
+details.phase{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-top:12px;
+  box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 120px);}
+details.phase>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 15px;}
+details.phase>summary::-webkit-details-marker{display:none;}
+.badge{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:16px;color:var(--oncolor);
+  background:var(--accent);min-width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+.phase-title{font-family:"Barlow Semi Condensed",sans-serif;font-weight:600;font-size:18px;letter-spacing:.2px;flex:1;}
+.chev{color:var(--muted);transition:transform .2s;flex:none;}
+details.phase[open] .chev{transform:rotate(180deg);}
+.steps{padding:2px 8px 10px;display:flex;flex-direction:column;gap:2px;}
+button.step{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:transparent;
+  border:none;border-radius:9px;padding:11px 9px;font:inherit;color:var(--ink);cursor:pointer;line-height:1.4;}
+button.step:active{background:var(--surface-2);}
+.cbox{flex:none;width:23px;height:23px;margin-top:1px;border:2px solid var(--tap);border-radius:6px;
+  display:inline-flex;align-items:center;justify-content:center;transition:background .12s,border-color .12s;}
+.cbox svg{width:15px;height:15px;stroke:var(--oncolor);opacity:0;}
+button.step.done .cbox{background:var(--done);border-color:var(--done);}
+button.step.done .cbox svg{opacity:1;}
+.step-txt{flex:1;}
+button.step.done .step-txt{color:var(--muted);text-decoration:line-through;
+  text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent);}
+.step b{font-weight:600;color:var(--accent);}
+button.step.done .step b{color:inherit;}
+button.step.imp{background:var(--warn-bg);border-left:3px solid var(--warn-line);border-radius:7px;}
+button.step.imp .cbox{border-color:var(--warn);}
+button.step.imp .step-txt{font-weight:500;}
+button.step.imp .flag{color:var(--warn);font-weight:700;}
+button.step.win{background:var(--done-bg);border-left:3px solid var(--done);border-radius:7px;}
+button.step.win .step-txt{font-weight:600;}
+.ref-head{font-family:"Barlow Semi Condensed",sans-serif;text-transform:uppercase;letter-spacing:1.5px;
+  font-size:13px;font-weight:700;color:var(--muted);margin:30px 4px 4px;}
+.card{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:11px;padding:13px 15px;margin-top:11px;box-shadow:var(--shadow);}
+.card.amber{border-left-color:var(--warn-line);background:var(--warn-bg);}
+.card h3{font-family:"Barlow Semi Condensed",sans-serif;text-transform:uppercase;letter-spacing:.6px;
+  font-size:14px;font-weight:700;color:var(--accent);margin:0 0 8px;}
+.card.amber h3{color:var(--warn);}
+.card p{margin:5px 0;font-size:15px;}
+.card .k{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--accent);font-size:13.5px;}
+.card.amber .k{color:var(--warn);}
+.card .muted{color:var(--muted);}
+.card .row{display:flex;gap:8px;margin:5px 0;}
+.card .row .lab{font-weight:600;min-width:62px;flex:none;color:var(--ink);}
+footer{text-align:center;color:var(--muted);font-size:12.5px;margin:28px 0 10px;}
+
+/* ---------- no-JS fallback (iOS Quick Look, printing) ---------- */
+.nojs{padding-bottom:40px;}
+.nojs-note{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn);
+  border-radius:12px;padding:13px 15px;margin:18px 0 6px;font-size:14.5px;line-height:1.45;}
+.nojs-title{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:27px;
+  color:var(--accent);margin:30px 0 0;letter-spacing:.3px;}
+.nojs-sub{margin:2px 0 0;color:var(--muted);font-size:15px;}
+.nojs-phase{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:19px;
+  color:var(--accent);margin:22px 0 4px;letter-spacing:.2px;}
+.nojs ul{margin:4px 0;padding-left:22px;}
+.nojs li{margin:5px 0;}
+.nojs li.imp{color:var(--warn);font-weight:600;}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div id="app"><!--__STATIC__--></div>
+
+<script>/*__DATA__*/</script>
+<script>
+(function(){
+  const M = (window.MANUALS || []);
+  const B = Object.assign({version:'0.0.0', date:'', stamp:''}, window.BUILD || {});
+  const app = document.getElementById('app');
+  const byId = id => M.find(m => m.id === id);
+  const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>';
+  const CHEV = '<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+  const VIEWS = ['guide','illustrated','checklist'];
+  const VLABEL = {guide:'Guide', illustrated:'Illustrated', checklist:'Checklist'};
+
+  function parseHash(){
+    const h = (location.hash || '').replace(/^#\/?/, '');
+    const [id, view] = h.split('/');
+    return {id: id || null, view: VIEWS.includes(view) ? view : 'guide'};
+  }
+  function go(id, view){ location.hash = id ? ('#' + id + '/' + (view||'guide')) : '#'; }
+
+  // ---------- hub ----------
+  function renderHub(){
+    let tiles = '';
+    for(const m of M){
+      const soon = m.status !== 'ready';
+      if(soon){
+        tiles += `<div class="tile soon">
+          <span class="tt">${m.title}</span><span class="ts">${m.subtitle}</span>
+          <span class="pill">Coming soon</span></div>`;
+      } else {
+        tiles += `<a class="tile" href="#${m.id}/guide">
+          <span class="tt">${m.title}</span><span class="ts">${m.subtitle}</span>
+          <span class="pill">Open</span></a>`;
+      }
+    }
+    app.innerHTML = `
+      <div class="bar"><div class="bar-row"><h1>Trailer Docs</h1>
+        <span class="build"><span class="v">v${B.version}</span>
+        <span class="d">${B.date}</span></span></div></div>
+      <div class="wrap">
+        <div class="hero">
+          <div class="kicker">On-site manuals</div>
+          <h2>Trailer Docs</h2>
+          <p>Pick a manual. Each has a full guide and a tap-through checklist.</p>
+        </div>
+        <div class="tiles">${tiles}</div>
+        <footer>Works offline &middot; add to your home screen to run full-screen<br>
+          Version ${B.version} &middot; built ${B.stamp}</footer>
+      </div>`;
+    window.scrollTo(0,0);
+  }
+
+  // ---------- manual ----------
+  function renderManual(m, view){
+    const tabs = VIEWS.map(v =>
+      `<button class="tab${v===view?' active':''}" data-v="${v}">${VLABEL[v]}</button>`).join('');
+    const showCount = view === 'checklist';
+    app.innerHTML = `
+      <div class="bar">
+        <div class="bar-row">
+          <button class="backbtn" id="back" aria-label="All manuals">&#8592;</button>
+          <span class="mtitle">${m.title}</span>
+          ${showCount ? '<span class="count" id="count">0 / 0</span><button class="reset" id="reset">Reset</button>' : ''}
+        </div>
+        ${showCount ? '<div class="progress"><i id="bar"></i></div>' : ''}
+      </div>
+      <div class="tabs"><div class="tabs-in">${tabs}</div></div>
+      <div class="wrap" id="content"></div>`;
+    document.getElementById('back').onclick = () => go(null);
+    app.querySelectorAll('.tab').forEach(b => b.onclick = () => go(m.id, b.dataset.v));
+    const content = document.getElementById('content');
+    if(view === 'checklist') renderChecklist(m, content);
+    else renderReading(m, view, content);
+    window.scrollTo(0,0);
+  }
+
+  function renderReading(m, view, content){
+    const toc = (m.toc||[]).map(([hid,t]) =>
+      `<li><a href="#${m.id}/${view}::${hid}">${t}</a></li>`).join('');
+    const banner = (view==='illustrated' && !m.hasPhotos)
+      ? '<div class="photobanner">Illustrated version — photos will be added here once the shoot is done. For now this shows the full text.</div>' : '';
+    content.innerHTML = `
+      <div class="reading ${view==='illustrated'?'show-img':''}">
+        <details class="toc" open><summary>Contents ${CHEV}</summary><ol>${toc}</ol></details>
+        ${banner}
+        <div class="doc">${m.guide}</div>
+        <a class="totop" href="javascript:scrollTo(0,0)">&#8593; Back to top</a>
+        <footer>${m.title} &middot; ${m.subtitle}</footer>
+      </div>`;
+    // in-page anchor jumps (encoded as view::id in hash)
+    content.querySelectorAll('.toc a').forEach(a => {
+      a.onclick = e => {
+        e.preventDefault();
+        const id = a.getAttribute('href').split('::')[1];
+        const el = document.getElementById(id);
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      };
+    });
+  }
+
+  function renderChecklist(m, content){
+    const cl = m.checklist || {phases:[], reference:[]};
+    const key = 'tds-' + m.id + '-v1';
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch(e){ state = {}; }
+    let total = 0;
+
+    const frag = document.createDocumentFragment();
+    cl.phases.forEach((ph, pi) => {
+      const det = document.createElement('details');
+      det.className = 'phase'; det.open = true; det.id = 'p'+(pi+1);
+      const sum = document.createElement('summary');
+      sum.innerHTML = `<span class="badge">${pi+1}</span><span class="phase-title">${ph.title}</span>${CHEV}`;
+      det.appendChild(sum);
+      const steps = document.createElement('div'); steps.className = 'steps';
+      (ph.steps||[]).forEach((st, si) => {
+        const txt = (typeof st === 'string') ? st : st.t;
+        const kind = (typeof st === 'string') ? '' : (st.flag || '');
+        total++;
+        const id = 'p'+pi+'s'+si;
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'step' + (kind?(' '+kind):'');
+        const flag = kind==='imp' ? '<span class="flag">! </span>' : '';
+        btn.innerHTML = `<span class="cbox">${CHECK}</span><span class="step-txt">${flag}${txt}</span>`;
+        if(state[id]) btn.classList.add('done');
+        btn.onclick = () => { btn.classList.toggle('done'); state[id]=btn.classList.contains('done'); save(); tally(); };
+        steps.appendChild(btn);
+      });
+      det.appendChild(steps);
+      frag.appendChild(det);
+    });
+
+    if((cl.reference||[]).length){
+      const rh = document.createElement('div'); rh.className='ref-head'; rh.textContent='Quick reference';
+      frag.appendChild(rh);
+      cl.reference.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'card' + (r.amber?' amber':'');
+        card.innerHTML = `<h3>${r.title}</h3>${r.body||''}`;
+        frag.appendChild(card);
+      });
+    }
+    const foot = document.createElement('footer');
+    foot.innerHTML = 'Companion to the full ' + m.title + ' guide.';
+    frag.appendChild(foot);
+
+    const box = document.createElement('div'); box.className='checklist';
+    box.appendChild(frag); content.appendChild(box);
+
+    const countEl = document.getElementById('count');
+    const barEl = document.getElementById('bar');
+    function tally(){
+      let done=0; for(const k in state) if(state[k]) done++;
+      if(countEl) countEl.textContent = done + ' / ' + total;
+      if(barEl) barEl.style.width = (total? (done/total*100):0) + '%';
+    }
+    function save(){ try{ localStorage.setItem(key, JSON.stringify(state)); }catch(e){} }
+    const rb = document.getElementById('reset');
+    if(rb) rb.onclick = () => { state={}; save();
+      content.querySelectorAll('button.step.done').forEach(b=>b.classList.remove('done')); tally(); };
+    tally();
+  }
+
+  function render(){
+    const {id, view} = parseHash();
+    const m = id && byId(id);
+    if(!m || m.status !== 'ready'){ renderHub(); return; }
+    renderManual(m, view);
+  }
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+</body>
+</html>

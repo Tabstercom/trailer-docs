@@ -1,0 +1,182 @@
+title: Trailer Setup
+subtitle: Floor checklist
+order: 1
+
+phases:
+  - title: Unload & hydraulics
+    steps:
+      - Open the shutter door at the back, by the hitch.
+      - Twist the red switch (right of the AC unit) to vertical to enable the hydraulics.
+      - Confirm the trailer appears in the <b>HPC app</b>.
+      - If it doesn't appear, jump-start the battery — see the <b>Jump-start</b> card.
+      - "If on a recovery truck: once the driver says it's safe, retract the legs fully."
+      - "If on a recovery truck: unlock the <b>handbrake lever</b> at the hitch."
+
+  - title: Position
+    steps:
+      - Pick a spot with at least <b>2 m</b> clear on each side.
+      - Confirm at least <b>1.2 m</b> of space for the stairs.
+      - Check the ground is reasonably level.
+      - Check the ground at the stairs isn't higher than the trailer floor.
+      - "If towed: raise the trailer on the legs and lift the hitch off the tow bar."
+      - Stabilise the legs — app button, or manual mode with the spirit level.
+      - Lower the hitch wheel until it takes some of the weight.
+      - Put the handbrake by the hitch on.
+      - {t: "Check the stairs lower fully — before the driver leaves.", flag: imp}
+      - {t: "Check the trailer door opens — before the driver leaves.", flag: imp}
+
+  - title: Ask for power
+    steps:
+      - "Confirm what's needed: <b>1×32A 3-phase</b> (red) and <b>2×16A single-phase</b> (blue)."
+      - Ask production/sparks for the power — see the <b>Power</b> card for the phrasing.
+      - Check any distro boxes already on the generator for the correct outputs.
+      - {t: "If there's no power, or the wrong power, message your production contact.", flag: imp}
+
+  - title: Open the sides — do each side
+    steps:
+      - Undo the spring bolt at each end (pull down and twist so it catches).
+      - Unclip the centre red carabiner and re-clip it to the other point.
+      - Lift the side until it holds on its own tension.
+      - Pull the two white panels out from the centre, alternating between them.
+      - Unbolt the large white panel at each end.
+      - {t: "Repeat every step above on the opposite side.", flag: imp}
+      - {t: "Confirm both sides are fully disconnected before lowering anything.", flag: imp}
+
+  - title: Lower the hydraulic sides
+    steps:
+      - Confirm the hydraulics are on (red switch vertical).
+      - In the app, open <b>Extras</b> and select Extra 1 or 2 (the dot is the hitch).
+      - Press and hold <b>EXTEND</b> to lower the side.
+      - If the app loses connection, finish on the manual override — see the <b>Override</b> card.
+      - Repeat for the other hydraulic side.
+      - Fit a metal leg at each of the 4 corners, wedged against the ground.
+      - Stand in the middle, on the edge of the rig, and lift the final side up.
+      - Lock all 4 points on that side (spring bolt + hinge, each top corner).
+      - Repeat the raise-and-lock on the other side.
+
+  - title: Power the trailer
+    steps:
+      - Feed the 32A cable through the hole at the back-right corner.
+      - Run the 32A cable to the power source.
+      - Feed the two 16A cables out through the bottom.
+      - Connect the 16A cables to the source.
+      - Set the distro breakers on (red showing).
+      - At the breaker box, flip the top breaker (32A).
+      - Flip breaker 2 (charges the hydraulics battery).
+      - Flip breaker 4 (LIGHTS).
+      - Confirm the ceiling lights come on.
+
+  - title: Expand the rig
+    steps:
+      - {t: "Inspect the rig for damage; tell <b>David / Theo</b> if there is any.", flag: imp}
+      - Undo the 4 ratchet straps and store them in a corner.
+      - Remove the ceiling cables (unscrew the green pins, keep pins on the cables).
+      - Clear the packing foam into a corner.
+      - Hang the dehumidifiers on the wall handles.
+      - Clear everything off the floor where the rig will expand.
+      - Release the brakes on the left side and unfurl it into a semicircle.
+      - Drop the locking bolts into the floor holes.
+      - Release and unfurl the right side (3 bolts this side).
+      - Place the marker board in the centre, on its tape marks.
+      - Adjust every frame so it faces the centre.
+      - Put all the frame brakes back on.
+
+  - title: Power the rig
+    steps:
+      - Attach the white multiplug to the left 16A cable.
+      - Plug the 4 rig plugs into the white multiplug.
+      - Take the black multiplug (3 ports) to the other side.
+      - Plug the 3 plugs into the black multiplug.
+      - Flip breakers 5 & 6 (PC).
+      - "Frame 2: connect an ESPA box (no blue tape) using a kettle lead."
+      - "Frame 2: plug all its DC ports into that ESPA box."
+      - Place an ESPA box at the rear-left and rear-right for the Sonys.
+      - Connect each Sony to an ESPA box with a blue-tape cable.
+
+  - title: Framing
+    steps:
+      - Run the trigger cable under the floor mat.
+      - Behind the right-hand pillar (facing in from the door), check the LED hardware's two plugs are in.
+      - Route the orange-tape LED trigger cable through a higher eyelet, then plug it into the Sony start connector (blue tape) on frame 9.
+      - Check the Canons fire — mirror, then shutter.
+      - If any don't fire, inspect the star connectors on that section.
+      - Frame every camera to the rules — see the <b>Framing</b> card.
+      - Frame each Canon using the sequence on the <b>Frame a Canon</b> card.
+      - {t: "Allow 3–4 hours — this is the longest job of the setup.", flag: imp}
+
+  - title: Check framing
+    steps:
+      - Turn on all the mini-PCs.
+      - Check every USB hub port is turned on (blue light on each).
+      - Turn on the main PC and open Cyber Controller.
+      - Confirm every mini-PC shows as connected.
+      - Open Capture Grid and press <b>Start all CG</b>.
+      - Check the camera count (>180 good, >160 workable).
+      - Set every camera's mode to Manual — by hand at the camera.
+      - Set every AF camera's focus to MF — by hand at the camera.
+      - Set ISO, aperture and shutter in Capture Grid — see the <b>Settings</b> card.
+      - Clear any cameras still in live view (MLU shows on+up).
+      - Fire a single and check focus, framing and polarisation.
+      - Fix flagged cameras, delete, and re-fire until clean.
+      - Frame the Sonys — see the <b>Sony focus</b> card.
+
+  - title: Final check
+    steps:
+      - Do a full Prime + Fire and check the light pass syncs.
+      - Press <b>Cycle</b> and watch all the lights fire in sequence.
+      - Listen for gaps; cycle a few times, watching different sections.
+      - For any dead light, work through the <b>Dead light</b> card.
+      - "In Capture Grid → Network tab, check each mini-PC's disk space; under 250 GB, right-click it and Clean."
+      - {t: "All lights cycling and disk space clear — ready to scan.", flag: win}
+
+reference:
+  - title: Power — what to ask for
+    body: |
+      <p><span class="k">1×32A 3-ph + 2×16A single-ph</span></p>
+      <p><b>or</b> <span class="k">1×63A 3-ph</span> — feeds our own distro box.</p>
+  - title: Jump-start order
+    body: |
+      <div class="row"><span class="lab">Pack</span><span>Red→Dead (+), Black→Ground (–). Reverse to remove.</span></div>
+      <div class="row"><span class="lab">Cables</span><span>Red Dead+, Red Live+, Black Live–, Black Dead-ground. Reverse to remove.</span></div>
+  - title: Breaker map
+    body: |
+      <div class="row"><span class="lab">Top</span><span>32A main feed</span></div>
+      <div class="row"><span class="lab">2</span><span>charges the hydraulics battery</span></div>
+      <div class="row"><span class="lab">4</span><span>LIGHTS</span></div>
+      <div class="row"><span class="lab">5 &amp; 6</span><span>PC — final third of the rig</span></div>
+  - title: Frame a Canon (50 mm)
+    body: |
+      <p>Mode → <b>Av</b> &nbsp;·&nbsp; focus switch forward (AF on) &nbsp;·&nbsp; press <b>Live View</b>.</p>
+      <p>Unscrew the head knob &nbsp;·&nbsp; check it's cross-polarised &nbsp;·&nbsp; half-press to focus &nbsp;·&nbsp; lock the head.</p>
+      <p>Live View off &nbsp;·&nbsp; focus switch back (AF off) &nbsp;·&nbsp; mode back to <b>Manual</b>.</p>
+      <p class="muted"><b>Zoom lens:</b> focus before <em>and</em> after polarising.</p>
+  - title: Sony focus
+    body: |
+      <p>Subject stays centred (small people: hand above head).</p>
+      <p>Capture Grid left panel → <b>Multiple</b> on → pick a Sony &nbsp;·&nbsp; main lights on.</p>
+      <p>MF → <b>AF Continuous</b> → Prime + Single Fire → let it download → back to <b>MF</b> (subject stays put until then).</p>
+      <p>On the Cameras page, sort by group <b>Sony</b> and confirm all are on MF.</p>
+      <p>Delete, re-fire, inspect. Still soft → manual focus wheel.</p>
+  - title: Capture Grid settings
+    body: |
+      <div class="row"><span class="lab">Mode</span><span>Manual &nbsp;·&nbsp; <b>Focus</b> MF &nbsp;<span class="muted">(both by hand at the camera)</span></span></div>
+      <div class="row"><span class="lab">ISO</span><span>200 (Canon)</span></div>
+      <div class="row"><span class="lab">Aperture</span><span>F11 &nbsp;·&nbsp; SPEC F22</span></div>
+      <div class="row"><span class="lab">Shutter</span><span>Canon 1/25 &nbsp;·&nbsp; Sony 1/30</span></div>
+  - title: Camera framing
+    body: |
+      <p><b>Top half</b> — zooms full wide (marker board + person); 50 mm on the head.</p>
+      <p><b>Bottom half</b> — zoom in on groin; 50 mm → nearest hand; 50 mm → nearest foot; 50 mm → other hand; bottom zoom wide.</p>
+  - title: Manual override
+    amber: true
+    body: |
+      <div class="row"><span class="lab">Rods</span><span>front = right side, back = left. Top raise / mid neutral / bottom lower.</span></div>
+      <p>One pin <b>bottom</b>, the other neutral. Crank left→right ~5 min. Easy = right way; hard = wrong pin, stop and check.</p>
+  - title: Dead light
+    amber: true
+    body: |
+      <p><b>1.</b> Powered on? If not, find where the disconnect is.</p>
+      <p><b>2.</b> On but not firing? Press <b>[Test]</b> — it should flash.</p>
+      <p><b>3.</b> No flash → bulb may be blown. Tell David / Theo, run without it for now.</p>
+      <p><b>4.</b> Flashes → replug the trigger cable at the back of the light, then cycle again.</p>
+      <p><b>5.</b> Still dead → check the circuit board in the PC cage for loose connections.</p>

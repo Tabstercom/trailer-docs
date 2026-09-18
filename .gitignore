@@ -1,0 +1,4 @@
+# build intermediates
+build/*_raw.md
+__pycache__/
+*.pyc

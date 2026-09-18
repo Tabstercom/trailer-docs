@@ -1,0 +1,18 @@
+# Master list of manuals. status: ready | soon
+manuals:
+  - id: setup
+    title: Trailer Setup
+    subtitle: On-site setup procedure
+    status: ready
+  - id: packdown
+    title: Trailer Packdown
+    subtitle: Striking & stowing the rig
+    status: soon
+  - id: daily-ops
+    title: Daily Operations
+    subtitle: Running the rig day to day
+    status: soon
+  - id: debugging
+    title: Debugging
+    subtitle: Diagnosing faults on set
+    status: soon
