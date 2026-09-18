@@ -23,7 +23,11 @@ trailer-docs/
 │   └── template.html        # app shell (HTML/CSS/JS)
 ├── VERSION                  # version number stamped into the app
 └── site/
-    └── Trailer Docs.html    # THE OUTPUT — the app you ship
+    ├── Trailer Docs.html    # THE OUTPUT — the standalone file you can send
+    ├── index.html           # same app + service worker, for hosting
+    ├── manifest.webmanifest # PWA metadata (name, colours, icons)
+    ├── sw.js                # offline cache; cache name carries the version
+    └── icon-*.png           # home-screen icons, generated on build
 ```
 
 ## Build
@@ -91,9 +95,28 @@ cards as plain (untickable) lists, behind an amber "Preview mode" note. Photos
 are left out of that view to keep the file small.
 
 To give iPhone users the real app — tabs, tap-through checklist, saved ticks,
-add-to-home-screen — put the file on a URL (any static host) and send the link
-instead of the file. `file://` on iOS can't save checklist state or be added to
-the home screen either way.
+add-to-home-screen — send the hosted link instead of the file. `file://` on iOS
+can't save checklist state or be added to the home screen either way.
+
+## The hosted copy
+
+Live at **https://tabstercom.github.io/trailer-docs/**
+
+`site/index.html` is the same app with a service worker attached, so once it has
+been opened over the network it runs with no signal at all. On site:
+
+1. Open the link once somewhere with signal.
+2. **Share → Add to Home Screen** (iPhone) or **Install app** (Android).
+3. It launches full-screen and works offline from then on.
+
+Publishing is a push: the workflow in `.github/workflows/pages.yml` ships
+whatever is committed under `site/`. The build runs locally (it needs pandoc),
+so the flow is `python3 build/build.py`, commit, push.
+
+The service worker caches under a name that includes the version, so **bump
+`VERSION` when you change content** — that's what makes installed phones pick up
+the new copy instead of serving the old cache. A phone updates on the second
+launch after a release: one to fetch it, one to run it.
 
 ## Notes
 
