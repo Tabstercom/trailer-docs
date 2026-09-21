@@ -1,7 +1,7 @@
 // Trailer Docs service worker -- the whole point of the hosted copy.
 // The cache name carries the build version, so publishing a new version
 // installs a fresh cache and drops the old one.
-const CACHE = 'trailer-docs-1.3.4';
+const CACHE = 'trailer-docs-1.3.5';
 
 // Every photo is precached at install, not lazily on first view: a phone that
 // installs at the office and then drives to a field with no signal has to have
