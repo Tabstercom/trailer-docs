@@ -1,7 +1,7 @@
 // Trailer Docs service worker -- offline shell for the hosted copy.
 // The cache name carries the build version, so publishing a new version
 // installs a fresh cache and drops the old one.
-const CACHE = 'trailer-docs-1.1.0';
+const CACHE = 'trailer-docs-1.2.0';
 const ASSETS = ['./', './index.html', './manifest.webmanifest',
                 './icon-180.png', './icon-192.png', './icon-512.png'];
 

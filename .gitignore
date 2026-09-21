@@ -2,3 +2,6 @@
 build/*_raw.md
 __pycache__/
 *.pyc
+
+# source Word masters, kept locally
+content/*/raw_docs/

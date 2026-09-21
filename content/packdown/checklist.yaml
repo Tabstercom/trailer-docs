@@ -1,5 +1,156 @@
-title: packdown
-subtitle: coming soon
-order: 9
-phases: []
-reference: []
+title: Trailer Packdown
+subtitle: Floor checklist
+order: 2
+
+phases:
+  - title: Disconnect the cables
+    steps:
+      - Power everything down except the lights and breaker 2 (hydraulics battery).
+      - Flip breakers 5 & 6 down (green).
+      - Disconnect the two floor multi-plugs (the 16A single-phase ones), both sides.
+      - Unplug the plugs that power the frames and wrap each around a nearby light.
+      - Stow both floor multi-plugs in the large plastic tub.
+      - Disconnect the 2 × Sony ESPA boxes; group the blue-tape DC cables in the tub.
+      - Wrap each ESPA kettle lead around a nearby light.
+      - Stow both Sony ESPA boxes and their power bricks in the tub.
+      - "Frame 2: disconnect the Canon ESPA box and tuck its DC inputs up into the frame."
+      - Wrap its kettle lead around a light; stow the box and brick in the tub.
+      - Disconnect the under-mat trigger cable (frame 12 → 9) at one end; wrap it on a light.
+      - Detach the frame 9 → LED Arduino trigger cable; wrap it by the Arduino.
+      - {t: "Walk the rig — nothing left touching the floor. Zip-tie strays back on.", flag: imp}
+
+  - title: Collapse the rig
+    steps:
+      - Take the marker board out and set it aside — you need it later.
+      - Stow the colour chart in the open top drawer of the PC cage.
+      - Pull up and lock the floor bolts — 2 on the left, 3 on the right.
+      - {t: "Leave the bolt nearest the main PC (between frames 1 & 20) attached.", flag: imp}
+      - Fold the screens into the bottom-row Canon zoom cameras.
+      - Release every frame brake (black tab horizontal).
+      - "Right side: curl the rig into a thin <b>U</b>, walking frame 10 to the back."
+      - Wedge frame 10 under the black roof bar (look for the scratches).
+      - Check all wheels sit inside the purple floor tape.
+      - Brake every wheel on the collapsed side.
+      - Link frame 10's two rear eyelets to the horizontal bar with 2 green-pin metal cables.
+      - "Left side: curl frame 12 around the middle into an inverted <b>J</b>."
+      - Check the purple tape again, then brake every wheel.
+      - Ratchet the 4 corners to the floor loops, around at least 2 frames — very tight.
+      - Link 2 green-pin cables per side, ceiling bar to the top of the outer frames.
+      - {t: "Untested: 4 straps per side binding middle frame to outer frame — firm, not tight.", flag: imp}
+
+  - title: Tidy everything away
+    steps:
+      - Disconnect the monitor and lay it face down on the tower; tape it in place.
+      - Put the mouse and keyboard in the cage, shut the door and twist it to lock.
+      - Collapse any chairs and the table behind the PC tower, against the back wall.
+      - Stack the tubs, tools and boxes in front of the PC cage, tightly packed.
+      - Add the loose items (broom etc.) into the gaps.
+      - Wedge the marker board sideways across the front, as a dam.
+      - Clip a grey dehumidifier to the middle of the outside of the rig, each side.
+      - Stack the foam outside or by the stairs — not on either side of the trailer.
+      - Final floor check — both side floors clear.
+
+  - title: Cables & power — part one
+    steps:
+      - Unplug the two 16A cables from the distro, source or extensions.
+      - Pull them back through the floor hole on the left side.
+      - Stop when the ports hang directly under the hole, no slack outside.
+      - Coil the slack behind the marker board, clear of the collapsing sides.
+      - Leave the 32A plugged in — it's your interior lighting for now.
+
+  - title: Collapse the sides — part one
+    steps:
+      - Lay the two white foam rectangles where the logo lights will land.
+      - Release the 4 points on the wall — spring bolt + hinge at each top corner.
+      - Pull the centre handle and lower the wall.
+      - {t: "Check it's flat — a dangling hinge loop props the corners up. Nudge it clear.", flag: imp}
+      - Repeat on the opposite side.
+      - At the breaker box, flip the top breaker down (green) — 32A off.
+      - Hook the cutout foam over the back of the light pairs.
+      - Lay the rest of the foam by the edges of the frames.
+
+  - title: Cables & power — part two
+    steps:
+      - Disconnect the 32A cable from the distro, source or extension.
+      - Feed it through the small hole into the rear cupboard (twist and push at the port).
+      - Coil any extensions and store them on the shelf above the cupboard.
+      - If used, disconnect our distro box and 63A cable (twist to release) and shelf them.
+
+  - title: Collapse the sides — part two
+    steps:
+      - Twist the red switch vertical to enable the hydraulics.
+      - In the app, open <b>Extras</b> and select Extra 1 or 2 (the dot is the hitch).
+      - Press and hold <b>RETRACT</b> to raise the side.
+      - If the app loses connection, finish on the manual override — see the <b>Override</b> card.
+      - Lock the raised panel with the two spring bolts (shove it if the bolt won't go).
+      - Repeat for the other side.
+      - Turn the hydraulics off (red switch sideways).
+      - Remove the 4 backup metal legs and stow them at the front of the trailer floor.
+      - Fold the side panels in against the wall.
+      - Pull the roof down and push it until it folds into the side (2 people).
+      - Lock the 3 side connections — spring bolt at each end, red carabiner to the chassis hole.
+      - Repeat the fold and lock on the other side.
+
+  - title: Stairs & locking up
+    steps:
+      - {t: "Pull the stair roof down — water pools on it, mind the soaking.", flag: imp}
+      - Twist and release the 2 spring bolts on the collapsed roof corners.
+      - Lift the stairs and push hard until they lock as the front door.
+      - "Multi-day transit or no one receiving it? Lock the front — keys are in the ziplock bag in the white panel at the top of the stairs, left."
+      - Clip a small carabiner to the stair section as an emergency backup.
+
+  - title: Loading
+    steps:
+      - Leave the hydraulic feet down until the vehicle arrives.
+      - When the driver arrives, flip the red switch vertical for hydraulics.
+      - Wind the jockey wheel up until it pivots 90° and the lever locks it away.
+      - "Flatbed: <b>RETRACT</b> all legs onto the wheels."
+      - "Flatbed: release the handbrake (black lever at the hitch) — or ask the driver."
+      - "Flatbed: tell the driver you control the legs; loading is their problem to solve."
+      - "Flatbed: once loaded, <b>EXTEND</b> the legs until they take the weight — floor parallel to the bed, not level."
+      - "Tow bar: raise the hitch on the legs, driver reverses under it, then lower onto the ball joint."
+      - "Tow bar: <b>RETRACT</b> all legs once it's on."
+      - "Tow bar: release the handbrake (black lever at the hitch) — or ask the driver."
+      - If you locked the trailer, hand the driver the ziplock bag of keys.
+      - {t: "Hydraulics off — red switch horizontal. Trailer is away.", flag: win}
+
+reference:
+  - title: Power-down order
+    body: |
+      <div class="row"><span class="lab">Keep on</span><span>Lights + breaker 2 (hydraulics battery), until the walls go up.</span></div>
+      <div class="row"><span class="lab">Off first</span><span>Breakers 5 &amp; 6 (PC) — down, showing green.</span></div>
+      <div class="row"><span class="lab">32A</span><span>Stays live for interior light until both sides are down.</span></div>
+      <div class="row"><span class="lab">Last</span><span>Top breaker down (green) once both walls are collapsed.</span></div>
+  - title: Into the plastic tub
+    body: |
+      <p>Both floor multi-plugs &nbsp;·&nbsp; all blue-tape Sony DC cables (as a group).</p>
+      <p>2 × Sony ESPA boxes + bricks &nbsp;·&nbsp; the Frame 2 Canon ESPA box + brick.</p>
+      <p class="muted">Kettle leads don't go in the tub — wrap each one around a nearby light.</p>
+  - title: Fold order
+    body: |
+      <div class="row"><span class="lab">Right</span><span>Frame 10 to the back, wedged under the black roof bar → thin <b>U</b>.</span></div>
+      <div class="row"><span class="lab">Left</span><span>Frame 12 wraps right around the middle → inverted <b>J</b>.</span></div>
+      <div class="row"><span class="lab">Both</span><span>All wheels inside the purple tape, then brakes on.</span></div>
+      <p class="muted">Stuck? Check for a wire under a wheel; otherwise it's a floor bump — push it with a foot on the wheel bar.</p>
+  - title: What holds the rig
+    body: |
+      <div class="row"><span class="lab">Floor bolt</span><span>The one at frames 1/20 by the main PC <b>stays in</b>.</span></div>
+      <div class="row"><span class="lab">Green pins</span><span>2 metal cables, frame 10 → horizontal bar.</span></div>
+      <div class="row"><span class="lab">Corners</span><span>4 ratchets, floor loop → top corner, ≥2 frames. Very tight.</span></div>
+      <div class="row"><span class="lab">White pins</span><span>4 cables, ceiling bar → outer frame tops, 2 per side, near the middle.</span></div>
+  - title: Manual override (raising)
+    amber: true
+    body: |
+      <div class="row"><span class="lab">Rods</span><span>front = right side, back = left. Top raise / mid neutral / bottom lower.</span></div>
+      <p>One pin <b>top</b>, the other neutral. Crank left→right ~5 min. Easy = right way; hard = wrong pin, stop and check.</p>
+      <p class="muted">Check visually after ~10 cranks. Stop at resistance, then lock the two spring bolts.</p>
+  - title: Untested steps
+    amber: true
+    body: |
+      <p>The <b>frame-binding ratchet straps</b> (4 per side, middle frame to outer frame) have not been used on a real packdown yet.</p>
+      <p>Do them up firmly, but not tight enough to bend the frames or pull them out of position.</p>
+      <p class="muted">The 4 corner straps to the floor loops <em>are</em> tested — those go on very tight.</p>
+  - title: Trailer keys
+    body: |
+      <p>Clear ziplock bag, inside the small white panel at the top of the stairs on the left (facing the trailer), by the door.</p>
+      <p>Lock up for multi-day transit or when nobody is receiving it — then hand the bag to the driver.</p>

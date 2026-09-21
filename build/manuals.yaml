@@ -7,7 +7,7 @@ manuals:
   - id: packdown
     title: Trailer Packdown
     subtitle: Striking & stowing the rig
-    status: soon
+    status: ready
   - id: daily-ops
     title: Daily Operations
     subtitle: Running the rig day to day
