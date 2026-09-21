@@ -143,7 +143,7 @@ In the rear of the trailer, behind the shutter door on the right, you will find 
 
 There are two silver metal rods with twisty tops; these control what operation the manual crank will perform. The rod in front controls the right side, and the rod at the back controls the left side. Each rod has three states: raise, neutral, and lower.
 
-[right = front, left = back](images/manual_override_pilons.webp)
+![right = front, left = back](images/manual_override_pilons.webp)
 
 On the back of the rod you will see a small pin and some channels cut into the rod for the pin to slide through. It looks and behaves similarly to a manual transmission in a car, but instead of 5–6 gears there are three. Each position puts the hydraulics into one of the three states:
 
@@ -155,7 +155,7 @@ On the back of the rod you will see a small pin and some channels cut into the r
 
 To move the pin, twist the top of the rod to move it laterally, and pull or push to move it vertically.
 
-[up,neutrual,down](images/manual_overide.webp)
+![up,neutrual,down](images/manual_overide.webp)
 
 To continue, put one pin into the bottom position and make sure the other is in neutral. Then retrieve the crank bar from its place on the inside of the cabinet door next to you. To the right of the control rods you will see a hole that the crank bar slots into.
 
@@ -167,22 +167,22 @@ To continue, put one pin into the bottom position and make sure the other is in 
 
 2.  The side being lowered has two metal pins at its corners, designed to slot into openings on the expanded sides. If there are two of you, one person should stay by the side and may have to pull the expanded sides closer into the lowering side so the pins line up.
 
-[pin and hole](images/side_lowering.webp)
+![pin and hole](images/side_lowering.webp)
 
 3.  Keep cranking until you feel resistance, then check the pins. They often catch on the lip of the opening; if they do, give the expanded side a shove and the pin should fall into the hole.
 
-[pin caught](images/side_pin_alignment.webp)
+![pin caught](images/side_pin_alignment.webp)
 
 4.  Make sure both pins on the side are slotted into the expanded-wall holes, and give a final crank check to make sure it's fully down. Don't try to push past resistance.
 
-[side lowered](images/side_lowered.webp)
+![side lowered](images/side_lowered.webp)
 
 ## Fitting the support legs
 Head inside to grab the four metal legs. Go to a corner of the trailer and place one underneath so that it touches both the expanded side and the lowered floor panel, then twist it so it wedges itself between the ground and the corner.
 
-[leg](images/support_leg.webp)
+![leg](images/support_leg.webp)
 
-[leg in postion](images/support_leg_attached.webp)
+![leg in postion](images/support_leg_attached.webp)
 
 ::: note
 A trick with these metal legs: get them to almost the right height before placing them underneath. To change the height quickly, hold the leg in one hand to stop the nut from spinning, and with your free hand swivel the foot around to change its height.
@@ -195,7 +195,7 @@ Now it's time to raise the final side. Head inside the trailer and stand in the 
 
 Once it's raised there are four connection points to lock it in place. On either side, at the top corner, there is a spring-assisted locking bolt and a metal locking hinge.
 
-[bolt and hinge](images/wall_bolts.webp)
+![bolt and hinge](images/wall_bolts.webp)
 
 Release the bolt so it slides behind the metal. For the hinge, push the slider on the front up to unlock it, position it so the loop is caught by the ceiling, then pull it down so it locks. Make sure all four connections are attached, then repeat on the other side.
 
@@ -209,7 +209,7 @@ All the cable types are different, so don't worry about connecting something wro
 ## 1 × 32 amp 3-phase (large cable with a red port)
 This input cable is found in the rear of the trailer behind the shutter door, resting on top of the battery. Take the end and try to feed it through the small hole at the back right corner of the space it's in. It won't fully fit, so go around and try pulling from the other side; give it a few twists and it should reluctantly pop through.
 
-[almost out](images/32_amp_port.webp)
+![almost out](images/32_amp_port.webp)
 
 Run the cable to the power source (distro box or generator). If you don't have enough cable, there is a large extension inside the back of the trailer, in the section above the battery and hydraulics.
 
@@ -235,11 +235,11 @@ First, inspect the rig for any damage. If there is any, please let David or Theo
 
 The rig will have been secured with ratchet straps and metal cables. There are four ratchet straps, one in each corner of the rig — undo them all and store them neatly in a corner.
 
-[corner ratchet straps](images/corner_ratchet_flocked.webp)
+![corner ratchet straps](images/corner_ratchet_flocked.webp)
 
 Next, find the metal cables that attach the rig to the ceiling bar. Unscrew the green pins to remove them, and try to keep the pins attached to the cable ends when storing.
 
-[try not to drop the pin](images/green_pin.webp)
+![try not to drop the pin](images/green_pin.webp)
 
 There will be a cable with a carabiner wrapped around the door frame on the right side near the trailer entrance — remove that as well.
 
@@ -267,7 +267,7 @@ Now it's time to start unfurling. If you stand in the door facing the rig, you w
 
 3.  Get the frames into a rough semi-circle shape, then look at the floor. You will find two metal circles — these are spring-loaded holes. There are two metal locking bolts on the bottom of the frames, which should be near the holes; find them, then pull and wiggle the frame until the bolt is over the hole and slide it in to fix the frame in position.
 
-[left side open](images/left_side_unfurled.webp)
+![left side open](images/left_side_unfurled.webp)
 
 4.  Now that the left side is open, you have access to the last cables tying the middle frame to the ceiling bar. Unscrew the green pins and store the cables.
 
@@ -275,7 +275,7 @@ Now it's time to start unfurling. If you stand in the door facing the rig, you w
 
 6.  Find the marker board and place it in the middle of the rig — there should be black and red tape markers for where it's positioned.
 
-[fully open](images/full_rig_oppen.webp)
+![fully open](images/full_rig_oppen.webp)
 
 7.  Stand in the middle of the marker board and look at each frame in turn; they should all face you. If they don't, adjust them. Once you're done you should have a cohesive circle where every frame points forward, to the centre.
 
@@ -286,11 +286,11 @@ Now the rig is expanded, it's time to turn all the cameras on. Find one of the b
 
 Take the white multi-plug and attach it to the 16 amp cable that powers the left (the side with the hole for the 16 amp cables), and place it by the left side.
 
-[white multi-plug](images/multi-plug.webp)
+![white multi-plug](images/multi-plug.webp)
 
 There are four plugs coming from the rig that need to be plugged into the white multi-plug. These plugs are the power source for the vertical multi-plugs on the frames; during transit they are wrapped around the lights.
 
-[plugs in transit](images/plug_around_light.webp)
+![plugs in transit](images/plug_around_light.webp)
 
 Once all four are plugged in, take the black multi-plug (with three usable ports) to the other side, find the three plugs and plug them in.
 
@@ -301,18 +301,18 @@ There is still a single frame left without power: Frame 2.
 
 Go back to the plastic tub and find an ESPA power box that has NO blue tape on it. The power box should come with a power brick, but no kettle lead to power it. Take it over to Frame 2 — you should find a kettle lead wrapped around one of the nearby lights to power the ESPA box. At the base of the frame, all the camera DC power ports should be either hanging or tidied near the base; plug them all into the ESPA box and Frame 2 should come alive.
 
-[frame 2 ESPA](images/frame_20_espa.webp)
+![frame 2 ESPA](images/frame_20_espa.webp)
 
 ## The Sonys
 Head back to the plastic tub and retrieve the last two ESPA boxes with their power bricks. Place one on the outside of the left frame near the back of the trailer, and the other on the outside of the right frame near the back of the trailer.
 
 The plastic tub should also contain several thick power cables with blue tape — these connect the Sonys to the ESPA boxes. Go to each Sony, find its power input port (it should have blue tape on it) and attach the cable. If the cable doesn't reach the ESPA box, use a second cable as an extension. There are enough cables for all the Sonys to be powered without being under tension.
 
-[connecting to sony battery](images/sony_power.webp)
+![connecting to sony battery](images/sony_power.webp)
 
-[sony kettle stored in transit](images/sny_kettle_around_light.webp)
+![sony kettle stored in transit](images/sny_kettle_around_light.webp)
 
-[sony ESPA powered on](images/sony_espa_powered_on.webp)
+![sony ESPA powered on](images/sony_espa_powered_on.webp)
 
 # Framing
 Now that everything is on, it's time to frame. Leave the mini-PCs and the main PC off for this.

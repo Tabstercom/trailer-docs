@@ -29,7 +29,7 @@ trailer-docs/
 │   ├── photos.py            # the photo pipeline (build.py runs it)
 │   ├── annotate.html        # the annotation editor — open it in a browser
 │   └── template.html        # app shell (HTML/CSS/JS)
-├── VERSION                  # version number stamped into the app
+├── VERSION                  # version number — auto-bumped on every build
 └── site/                    # THE OUTPUT — this is what gets published
     ├── index.html           # the app
     ├── photos/              # content-hashed photos
@@ -54,10 +54,23 @@ That runs the photo pipeline, then regenerates everything under `site/`.
 Each build stamps it — plus the build date and time — into the app: the version
 and date show top-right on the hub, and the full stamp sits in the footer.
 
-The service worker caches under a name that includes the version, so **bump
-`VERSION` when you change content** — that's what makes installed phones pick up
-the new copy instead of serving the old cache. A phone updates on the second
-launch after a release: one to fetch it, one to run it.
+**Every build bumps the patch digit automatically** (1.3.0 → 1.3.1) and writes
+it back to `VERSION`. You don't need to touch the file; edit it by hand only to
+move the major or minor digit for a release worth naming.
+
+That's deliberate, because the service worker caches under a name that includes
+the version. An unchanged version means installed phones keep serving the old
+cache however many times you rebuild and push — the content ships and nobody on
+site ever sees it. Bumping every time makes that impossible to forget.
+
+For a throwaway local build you aren't going to publish:
+
+```
+python3 build/build.py --no-bump
+```
+
+A phone updates on the second launch after a release: one to fetch it, one to
+run it.
 
 ## Editing content
 

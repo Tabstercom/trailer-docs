@@ -1,19 +1,28 @@
 // Trailer Docs service worker -- the whole point of the hosted copy.
 // The cache name carries the build version, so publishing a new version
 // installs a fresh cache and drops the old one.
-const CACHE = 'trailer-docs-1.3.0';
+const CACHE = 'trailer-docs-1.3.4';
 
 // Every photo is precached at install, not lazily on first view: a phone that
 // installs at the office and then drives to a field with no signal has to have
-// all of them already. Photo URLs carry a content hash, so the ones that did
-// not change are served from the browser's own cache during this install.
-const ASSETS = [
+// all of them already.
+//
+// The split matters. SHELL files keep the same URL every build, so a new
+// worker has to refetch them or it would serve the previous app forever.
+// PHOTO urls carry a content hash, so a url that still matches is
+// byte-identical and can be copied straight out of the old cache -- no
+// network at all. Pages serves Cache-Control: max-age=600, so ten minutes
+// after a build, refetching would put 37 revalidation round trips between a
+// weak signal and a working app, for photos the phone already has.
+const SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icon-180.png",
   "./icon-192.png",
-  "./icon-512.png",
+  "./icon-512.png"
+];
+const PHOTOS = [
   "./photos/setup-32_amp_port.33434b3a.webp",
   "./photos/setup-closed_side.89f2c7e3.webp",
   "./photos/setup-corner_ratchet_flocked.288aada7.webp",
@@ -54,8 +63,24 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))
-    .then(() => self.skipWaiting()));
+  e.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    await cache.addAll(SHELL);
+
+    const carried = new Set();
+    for (const key of (await caches.keys()).filter(k => k !== CACHE)) {
+      const prev = await caches.open(key);
+      for (const url of PHOTOS) {
+        if (carried.has(url)) continue;
+        const hit = await prev.match(url);
+        if (hit) { await cache.put(url, hit); carried.add(url); }
+      }
+    }
+
+    const fresh = PHOTOS.filter(u => !carried.has(u));
+    if (fresh.length) await cache.addAll(fresh);
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', e => {

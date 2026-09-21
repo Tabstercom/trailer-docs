@@ -398,8 +398,39 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin:28px 0 10px;
 // signal at all. Registration failing is not fatal -- the app still works,
 // it just won't survive losing the network.
 if('serviceWorker' in navigator){
+  var SW_START = Date.now();
+
+  // How long after opening the app an update may reload the page underneath
+  // you. A new worker activates and claims this page, but claiming does not
+  // re-render it -- without the reload the new content sits downloaded and
+  // unseen until the next launch. Reloading is only polite while they are
+  // still on the hub; someone ten minutes into a checklist would lose their
+  // scroll position and tab for content that can wait for the next launch.
+  // Ticks live in localStorage, so those survive either way.
+  var RELOAD_WINDOW = 15000;
+  var reloading = false;
+
+  // No controller means this is a first install, and the claim that follows
+  // is not an update worth reloading for.
+  var hadController = !!navigator.serviceWorker.controller;
+
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if(!hadController || reloading) return;
+    if(Date.now() - SW_START > RELOAD_WINDOW) return;
+    reloading = true;
+    window.location.reload();
+  });
+
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      reg.update();
+      // A phone left open on the rig for days never navigates, so the
+      // browser's own once-a-day check may not come round. Ask again
+      // whenever the app comes back to the foreground.
+      document.addEventListener('visibilitychange', function(){
+        if(document.visibilityState === 'visible') reg.update();
+      });
+    }).catch(function(){});
   });
 }
 </script>

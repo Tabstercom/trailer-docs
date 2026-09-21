@@ -17,7 +17,11 @@ with none. Photos are separate files rather than inlined base64: the app paints
 before they arrive, the browser caches them one by one, and the service worker
 precaches the lot at install so nothing is missing in the field.
 
-Usage:  python3 build/build.py
+Every build bumps the patch digit in VERSION, because the service worker
+cache name carries the version and an unchanged one leaves installed phones
+on the old cache. Use --no-bump for a local build you will not publish.
+
+Usage:  python3 build/build.py [--no-bump]
 """
 import os, re, json, shutil, hashlib, subprocess, sys
 from datetime import datetime
@@ -50,6 +54,27 @@ def version():
             return f.read().strip() or "0.0.0"
     except FileNotFoundError:
         return "0.0.0"
+
+
+def bump_version():
+    """Increment the patch digit in VERSION and write it back.
+
+    The service worker cache name carries the version, so an unchanged
+    VERSION means every installed phone keeps serving the old cache no
+    matter how many times you rebuild -- the content ships, nobody sees it.
+    Bumping on every build makes that impossible to forget. Pass --no-bump
+    for a throwaway local build you are not going to publish.
+    """
+    cur = version()
+    m = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", cur)
+    if not m:
+        print("VERSION is %r, not X.Y.Z -- leaving it alone" % cur)
+        return cur
+    major, minor, patch = (int(g) for g in m.groups())
+    new = "%d.%d.%d" % (major, minor, patch + 1)
+    with open(VERSION_FILE, "w", encoding="utf-8", newline="\n") as f:
+        f.write(new + "\n")
+    return new
 
 
 def load_yaml(path):
@@ -174,13 +199,37 @@ const CACHE = 'trailer-docs-__VERSION__';
 
 // Every photo is precached at install, not lazily on first view: a phone that
 // installs at the office and then drives to a field with no signal has to have
-// all of them already. Photo URLs carry a content hash, so the ones that did
-// not change are served from the browser's own cache during this install.
-const ASSETS = __ASSETS__;
+// all of them already.
+//
+// The split matters. SHELL files keep the same URL every build, so a new
+// worker has to refetch them or it would serve the previous app forever.
+// PHOTO urls carry a content hash, so a url that still matches is
+// byte-identical and can be copied straight out of the old cache -- no
+// network at all. Pages serves Cache-Control: max-age=600, so ten minutes
+// after a build, refetching would put 37 revalidation round trips between a
+// weak signal and a working app, for photos the phone already has.
+const SHELL = __SHELL__;
+const PHOTOS = __PHOTOS__;
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))
-    .then(() => self.skipWaiting()));
+  e.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    await cache.addAll(SHELL);
+
+    const carried = new Set();
+    for (const key of (await caches.keys()).filter(k => k !== CACHE)) {
+      const prev = await caches.open(key);
+      for (const url of PHOTOS) {
+        if (carried.has(url)) continue;
+        const hit = await prev.match(url);
+        if (hit) { await cache.put(url, hit); carried.add(url); }
+      }
+    }
+
+    const fresh = PHOTOS.filter(u => !carried.has(u));
+    if (fresh.length) await cache.addAll(fresh);
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', e => {
@@ -254,11 +303,15 @@ def write_site(html_out, allphotos, build):
     with open(os.path.join(SITE, "manifest.webmanifest"), "w", encoding="utf-8") as f:
         json.dump(MANIFEST, f, indent=2)
 
-    assets = (["./", "./index.html", "./manifest.webmanifest",
-               "./icon-180.png", "./icon-192.png", "./icon-512.png"]
-              + ["./photos/" + n for n in sorted(allphotos)])
+    # Kept apart on purpose -- see the comment in SW_JS. Shell urls are stable
+    # across builds and must be refetched; photo urls are content-hashed and
+    # can be carried over from the previous cache untouched.
+    shell = ["./", "./index.html", "./manifest.webmanifest",
+             "./icon-180.png", "./icon-192.png", "./icon-512.png"]
+    photo_urls = ["./photos/" + n for n in sorted(allphotos)]
     sw = SW_JS.replace("__VERSION__", build["version"])
-    sw = sw.replace("__ASSETS__", json.dumps(assets, indent=2))
+    sw = sw.replace("__SHELL__", json.dumps(shell, indent=2))
+    sw = sw.replace("__PHOTOS__", json.dumps(photo_urls, indent=2))
     with open(os.path.join(SITE, "sw.js"), "w", encoding="utf-8") as f:
         f.write(sw)
 
@@ -266,6 +319,12 @@ def write_site(html_out, allphotos, build):
 
 
 def main():
+    args = set(sys.argv[1:])
+    unknown = args - {"--no-bump"}
+    if unknown:
+        sys.exit("unknown option(s): %s\nUsage: python3 build/build.py [--no-bump]"
+                 % " ".join(sorted(unknown)))
+
     photolib.run()
 
     cfg = load_yaml(os.path.join(ROOT, "build", "manuals.yaml"))
@@ -279,9 +338,12 @@ def main():
         sys.exit("missing photos referenced by manual.md:\n%s\n"
                  "Run the photo pipeline, or fix the filename." % lines)
 
+    # Bump only once the build is certain to succeed -- a run that dies on a
+    # missing photo should not burn a version number.
     now = datetime.now()
+    prev = version()
     build = {
-        "version": version(),
+        "version": version() if "--no-bump" in args else bump_version(),
         "date": now.strftime("%Y-%m-%d"),
         "stamp": now.strftime("%Y-%m-%d %H:%M"),
     }
@@ -299,7 +361,10 @@ def main():
     kb = os.path.getsize(os.path.join(SITE, "index.html")) // 1024
     pkb = sum(len(d) for d in allphotos.values()) // 1024
     ready = [m["id"] for m in manuals if m["status"] == "ready"]
-    print("built %s  v%s  %s" % (SITE, build["version"], build["stamp"]))
+    note = ("bumped from %s" % prev if build["version"] != prev
+            else "VERSION held -- installed phones will keep the old cache")
+    print("built %s  v%s  %s  (%s)"
+          % (SITE, build["version"], build["stamp"], note))
     print("       index.html %d KB + %d photos %d KB" % (kb, len(allphotos), pkb))
     print("       ready: %s" % ", ".join(ready))
 
