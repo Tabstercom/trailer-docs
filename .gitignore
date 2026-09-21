@@ -5,3 +5,9 @@ __pycache__/
 
 # source Word masters, kept locally
 content/*/raw_docs/
+
+# phone dumps -- 4 MB each. masters/ is the committed original.
+content/*/photos_raw/
+
+# rendered by build/photos.py from masters/ + photos.yaml
+content/*/images/

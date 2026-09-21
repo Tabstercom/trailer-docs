@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="Trailer Docs">
 <meta name="theme-color" content="#1b4965">
 <title>Trailer Docs</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -143,7 +145,17 @@ a{color:var(--link);}
 .doc ul>li{position:relative;padding-left:24px;margin:7px 0;}
 .doc ul>li::before{content:"";position:absolute;left:6px;top:.68em;width:7px;height:7px;border-radius:2px;background:var(--accent);}
 .doc li>p{margin:0;}
-.doc img.photo{display:block;max-width:100%;border-radius:10px;margin:12px 0;border:1px solid var(--line);}
+.doc figure{margin:18px 0;}
+.doc img.photo{display:block;margin:0 auto;max-width:100%;width:auto;height:auto;
+  /* portraits off a phone are 3:4 -- uncapped they'd fill the screen on their own */
+  max-height:72vh;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);}
+.doc figcaption{margin:7px 2px 0;color:var(--muted);font-size:14.5px;line-height:1.4;text-align:center;}
+.doc .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;}
+.doc .pair figure{margin:0;}
+.doc .pair img.photo{max-height:46vh;}
+.doc .pair figcaption{font-size:13.5px;}
+.reading:not(.show-img) .doc figure,
+.reading:not(.show-img) .doc .pair,
 .reading:not(.show-img) .doc img.photo{display:none;}
 .callout{border-radius:10px;padding:12px 15px 12px 14px;margin:15px 0;border-left:4px solid var(--warn-line);
   background:var(--warn-bg);box-shadow:var(--shadow);}
@@ -203,23 +215,11 @@ button.step.win .step-txt{font-weight:600;}
 .card .row .lab{font-weight:600;min-width:62px;flex:none;color:var(--ink);}
 footer{text-align:center;color:var(--muted);font-size:12.5px;margin:28px 0 10px;}
 
-/* ---------- no-JS fallback (iOS Quick Look, printing) ---------- */
-.nojs{padding-bottom:40px;}
-.nojs-note{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn);
-  border-radius:12px;padding:13px 15px;margin:18px 0 6px;font-size:14.5px;line-height:1.45;}
-.nojs-title{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:27px;
-  color:var(--accent);margin:30px 0 0;letter-spacing:.3px;}
-.nojs-sub{margin:2px 0 0;color:var(--muted);font-size:15px;}
-.nojs-phase{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:19px;
-  color:var(--accent);margin:22px 0 4px;letter-spacing:.2px;}
-.nojs ul{margin:4px 0;padding-left:22px;}
-.nojs li{margin:5px 0;}
-.nojs li.imp{color:var(--warn);font-weight:600;}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
 </head>
 <body>
-<div id="app"><!--__STATIC__--></div>
+<div id="app"></div>
 
 <script>/*__DATA__*/</script>
 <script>
@@ -392,6 +392,16 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin:28px 0 10px;
   window.addEventListener('hashchange', render);
   render();
 })();
+</script>
+<script>
+// Offline is the whole job: installed to the home screen, this runs with no
+// signal at all. Registration failing is not fatal -- the app still works,
+// it just won't survive losing the network.
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
 </script>
 </body>
 </html>

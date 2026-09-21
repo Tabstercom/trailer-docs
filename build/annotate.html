@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trailer Docs — photo annotator</title>
+<!--
+  Writes photos.yaml. Open this file in a browser (no server needed), point it
+  at content/<manual>/masters/, work through the folder, then copy the whole
+  file out in one go.
+
+  Nothing is rendered here. The canvas is a preview of what build/photos.py
+  will draw -- colours, halo and stroke weights are kept in step with the
+  PALETTE / HALO / DEFAULT_W constants in that file. Change one, change both.
+
+  Coordinates are fractions of the rotated master, not of the crop, so
+  re-cropping later slides the frame without moving the circles off the
+  thing they are circling.
+-->
+<style>
+:root{
+  --bg:#f3f1ec; --surface:#fff; --surface-2:#eeece5;
+  --ink:#1e2a30; --muted:#5d6b72; --line:#ded9cf;
+  --accent:#1b4965; --accent-soft:#e2ebf0; --oncolor:#fff;
+  --warn:#9a6608; --warn-bg:#fbf0d4; --warn-line:#e6c877;
+  --done:#3f7a52;
+  --shadow:0 1px 2px rgba(20,30,35,.06),0 4px 14px rgba(20,30,35,.05);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#11171b; --surface:#1a2228; --surface-2:#222d34;
+  --ink:#e7ecee; --muted:#9aa7ae; --line:#2c383f;
+  --accent:#7bb0cc; --accent-soft:#1d2e39; --oncolor:#06131b;
+  --warn:#e6b752; --warn-bg:#2a2314; --warn-line:#5a4a1e;
+  --done:#79c091;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.35);
+}}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,sans-serif;}
+header{background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:0;z-index:5;}
+h1{font-size:15px;margin:0 12px 0 0;letter-spacing:.3px;color:var(--accent);white-space:nowrap;}
+.grp{display:flex;gap:4px;align-items:center;padding-right:10px;border-right:1px solid var(--line);}
+.grp:last-child{border-right:none;}
+button,label.btn{font:inherit;font-size:13.5px;padding:6px 11px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface-2);color:var(--ink);white-space:nowrap;}
+button:hover,label.btn:hover{border-color:var(--accent);}
+button.on{background:var(--accent);border-color:var(--accent);color:var(--oncolor);}
+button:disabled{opacity:.4;cursor:default;}
+.sw{width:26px;height:26px;padding:0;border-radius:50%;border:2px solid transparent;}
+.sw.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface) inset;}
+input[type=file]{display:none;}
+#pos{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);min-width:56px;text-align:center;}
+#warn{display:none;background:var(--warn-bg);border-bottom:1px solid var(--warn-line);
+  color:var(--warn);padding:9px 16px;font-size:13.5px;}
+main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;padding:16px;align-items:start;}
+@media (max-width:900px){main{grid-template-columns:minmax(0,1fr);}}
+#stage{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+  padding:10px;min-height:300px;display:flex;align-items:center;justify-content:center;}
+canvas{max-width:100%;border-radius:6px;touch-action:none;cursor:crosshair;}
+canvas.empty{cursor:default;}
+aside{display:flex;flex-direction:column;gap:14px;}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;}
+.panel h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:0 0 8px;
+  display:flex;align-items:center;gap:8px;}
+.panel h2 .sp{margin-left:auto;text-transform:none;letter-spacing:0;}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0;}
+.row label{font-size:13px;color:var(--muted);min-width:52px;}
+input[type=text]{flex:1;min-width:0;font:inherit;font-size:13.5px;padding:6px 9px;border-radius:7px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);}
+ul{list-style:none;margin:0;padding:0;max-height:200px;overflow:auto;}
+li{display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 2px;border-bottom:1px solid var(--line);}
+li:last-child{border-bottom:none;}
+li .dot{width:11px;height:11px;border-radius:50%;flex:none;}
+li .k{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+li button{padding:1px 7px;font-size:13px;line-height:1.3;}
+#queue li{cursor:pointer;}
+#queue li.cur{background:var(--accent-soft);border-radius:6px;}
+#queue li.cur .k{color:var(--ink);font-weight:600;}
+#queue li .tick{width:14px;flex:none;text-align:center;color:var(--done);font-weight:700;}
+textarea{width:100%;font:12.5px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:9px;border-radius:8px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical;}
+.hint{font-size:12.5px;color:var(--muted);margin:8px 0 0;}
+.hint kbd{font:inherit;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:4px;padding:1px 5px;}
+.seg{display:flex;gap:0;}
+.seg button{border-radius:0;}
+.seg button:first-child{border-radius:7px 0 0 7px;}
+.seg button:last-child{border-radius:0 7px 7px 0;margin-left:-1px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Photo annotator</h1>
+  <div class="grp">
+    <label class="btn">Open folder…<input type="file" id="dir" webkitdirectory directory multiple></label>
+    <label class="btn">One file…<input type="file" id="file" accept="image/*"></label>
+  </div>
+  <div class="grp">
+    <button id="prevBtn" disabled>◀</button>
+    <span id="pos">—</span>
+    <button id="nextBtn" disabled>▶</button>
+    <button id="rot" title="Rotate 90° clockwise">Rotate ⟳</button>
+  </div>
+  <div class="grp" id="tools">
+    <button data-tool="crop" class="on">Crop <kbd>1</kbd></button>
+    <button data-tool="circle">Circle <kbd>2</kbd></button>
+    <button data-tool="pen">Pen <kbd>3</kbd></button>
+    <button data-tool="arrow">Arrow <kbd>4</kbd></button>
+  </div>
+  <div class="grp" id="colors"></div>
+  <div class="grp" id="widths">
+    <button data-w="0.005">Thin</button>
+    <button data-w="0.007" class="on">Med</button>
+    <button data-w="0.010">Thick</button>
+  </div>
+  <div class="grp">
+    <button id="undo">Undo</button>
+    <button id="resetcrop">Reset crop</button>
+    <button id="prev">Preview</button>
+  </div>
+</header>
+<div id="warn"></div>
+
+<main>
+  <div id="stage"><canvas id="c" class="empty" width="900" height="560"></canvas></div>
+
+  <aside>
+    <div class="panel">
+      <h2>This photo <span class="sp"><label><input type="checkbox" id="inc"> include</label></span></h2>
+      <div class="row"><label for="out">out</label><input type="text" id="out" placeholder="hydraulics-switch.webp"></div>
+      <div class="row"><label for="mst">master</label><input type="text" id="mst" readonly></div>
+      <p class="hint" id="dims">No master loaded.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Folder <span class="sp" id="qstat"></span></h2>
+      <ul id="queue"></ul>
+      <p class="hint" id="qempty">Open a folder of masters to work through.</p>
+      <div class="row"><button id="discard">Discard saved work</button></div>
+    </div>
+
+    <div class="panel">
+      <h2>Annotations (<span id="count">0</span>)</h2>
+      <ul id="list"></ul>
+      <p class="hint" id="empty">Drag on the photo to draw.</p>
+    </div>
+
+    <div class="panel">
+      <h2>photos.yaml</h2>
+      <div class="row seg">
+        <button id="modeAll" class="on">Whole file</button>
+        <button id="modeOne">This photo</button>
+      </div>
+      <textarea id="yaml" rows="12" readonly></textarea>
+      <div class="row"><button id="copy">Copy</button><button id="load">Load from paste…</button></div>
+      <p class="hint" id="yamlhint"></p>
+    </div>
+
+    <div class="panel">
+      <h2>Keys</h2>
+      <p class="hint"><kbd>1</kbd>–<kbd>4</kbd> tools · <kbd>←</kbd> <kbd>→</kbd> prev/next photo ·
+        <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo · <kbd>P</kbd> preview · <kbd>R</kbd> rotate.
+        Pen and arrow follow the mouse; circle and crop drag a box.</p>
+    </div>
+  </aside>
+</main>
+
+<script>
+(function(){
+// Kept in step with PALETTE / HALO / DEFAULT_W in build/photos.py.
+const PALETTE = {amber:[245,165,36], blue:[46,155,214], red:[224,71,62],
+                 green:[56,161,105], white:[255,255,255]};
+const HALO = 'rgba(10,18,24,0.57)';
+const DEFAULT_W = 0.007;
+const LSKEY = 'trailer-annotate';
+
+const $ = s => document.querySelector(s);
+const cv = $('#c'), ctx = cv.getContext('2d');
+
+let queue = [];          // Files, in folder order
+let qi = -1;             // index into queue
+let folder = '';         // folder name, used as the autosave key
+let entries = new Map(); // master filename -> {out, rotate, crop, anns, include}
+let cur = null;          // entries entry for the photo on screen
+let img = null;          // the rotated master, as an offscreen canvas
+let srcImg = null;       // the loaded Image, unrotated
+let token = 0;           // guards against a slow load landing after a fast one
+
+let tool = 'crop', color = 'amber', wfrac = DEFAULT_W;
+let preview = false, allMode = true;
+let drag = null;
+
+const blank = () => ({x:0, y:0, w:1, h:1});
+
+// The renderer always writes WebP, and manual.md references the filename, so
+// a bare `hydrolics_off` produces a file nothing can match. Mirror of
+// normalize_out() in build/photos.py.
+const IMG_EXT = /\.(jpe?g|png|gif|bmp|tiff?|heic|heif)$/i;
+function normOut(name){
+  const n = (name || '').trim();
+  if(!n) return '';
+  if(/\.webp$/i.test(n)) return n;
+  return (IMG_EXT.test(n) ? n.replace(IMG_EXT, '') : n) + '.webp';
+}
+
+function entryFor(name){
+  if(!entries.has(name)) entries.set(name, {
+    out: name.replace(/\.[^.]+$/, '') + '.webp',
+    rotate: 0, crop: blank(), anns: [], include: false});
+  const e = entries.get(name);
+  e.crop = Object.assign(blank(), e.crop);
+  e.anns = e.anns || [];
+  return e;
+}
+// Any edit opts the photo in. A folder usually has more shots than the manual
+// needs, so the default is out, not in.
+function touch(){ if(cur) cur.include = true; }
+
+// ---------- autosave ----------
+// A crash net, not the store of record -- photos.yaml is. Copy the YAML out
+// when you've done a batch; don't rely on this surviving.
+//
+// Keyed on a fingerprint of the filenames, not the folder name: every
+// manual's folder is called "masters", so keying on that alone would have
+// setup and packdown overwriting each other. Adding a photo to the folder
+// changes the fingerprint and starts a fresh autosave, which is the safe way
+// to be wrong. Storage can throw or come back empty in a private window.
+let fpKey = '';
+function fingerprint(names){
+  let h = 5381;
+  const s = names.join('|');
+  for(let i = 0; i < s.length; i++) h = ((h*33) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+function save(){
+  if(!fpKey) return;
+  try { localStorage.setItem(fpKey, JSON.stringify([...entries])); } catch(_){}
+}
+function restore(){
+  try {
+    const v = localStorage.getItem(fpKey);
+    if(!v) return 0;
+    const m = new Map(JSON.parse(v));
+    m.forEach((e, k) => entries.set(k, e));
+    return [...m.values()].filter(e => e.include).length;
+  } catch(_){ return 0; }
+}
+function discard(){
+  try { localStorage.removeItem(fpKey); } catch(_){}
+  entries = new Map();
+  if(qi >= 0){ cur = entryFor(queue[qi].name); $('#out').value = cur.out; applyRotation(); }
+  sync();
+  warn('Saved work for this folder discarded.');
+}
+
+// ---------- geometry ----------
+function C(){ return cur ? cur.crop : blank(); }
+function fit(){
+  if(!img) return null;
+  const c = C();
+  const sw = preview ? img.width * c.w  : img.width;
+  const sh = preview ? img.height * c.h : img.height;
+  const dpr = window.devicePixelRatio || 1;
+  const bw = cv.width/dpr, bh = cv.height/dpr;
+  const s = Math.min(bw/sw, bh/sh);
+  const dw = sw*s, dh = sh*s;
+  return {dw, dh, ox:(bw-dw)/2, oy:(bh-dh)/2};
+}
+function toC(n){
+  const f = fit(), c = C();
+  if(preview) return [f.ox + (n[0]-c.x)/c.w*f.dw, f.oy + (n[1]-c.y)/c.h*f.dh];
+  return [f.ox + n[0]*f.dw, f.oy + n[1]*f.dh];
+}
+function toN(p){
+  const f = fit(), c = C();
+  if(preview) return [c.x + (p[0]-f.ox)/f.dw*c.w, c.y + (p[1]-f.oy)/f.dh*c.h];
+  return [(p[0]-f.ox)/f.dw, (p[1]-f.oy)/f.dh];
+}
+// A stroke is a fraction of the OUTPUT width, and the output is the crop --
+// so on screen it scales with how much of the frame the crop takes up.
+function strokePx(w){
+  const f = fit();
+  return Math.max(1, (w || wfrac) * (preview ? f.dw : C().w * f.dw));
+}
+
+// ---------- drawing ----------
+function rgba(name, a){
+  const c = PALETTE[name] || PALETTE.amber;
+  return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + (a === undefined ? 1 : a) + ')';
+}
+function shapePath(a){
+  ctx.beginPath();
+  if(a.type === 'circle'){
+    const p = toC(a.c), f = fit(), c = C();
+    const sx = preview ? f.dw/c.w : f.dw, sy = preview ? f.dh/c.h : f.dh;
+    ctx.ellipse(p[0], p[1], Math.abs(a.r[0]*sx), Math.abs(a.r[1]*sy), 0, 0, Math.PI*2);
+  } else if(a.type === 'pen'){
+    a.pts.forEach((p,i) => { const q = toC(p); i ? ctx.lineTo(q[0],q[1]) : ctx.moveTo(q[0],q[1]); });
+  } else {
+    const p = toC(a.a), q = toC(a.b);
+    ctx.moveTo(p[0],p[1]); ctx.lineTo(q[0],q[1]);
+  }
+}
+function headPath(a, w){
+  const p = toC(a.a), q = toC(a.b);
+  const ang = Math.atan2(q[1]-p[1], q[0]-p[0]);
+  const L = Math.max(w*3.6, 6), sp = 26*Math.PI/180;
+  ctx.beginPath();
+  ctx.moveTo(q[0]-L*Math.cos(ang-sp), q[1]-L*Math.sin(ang-sp));
+  ctx.lineTo(q[0], q[1]);
+  ctx.lineTo(q[0]-L*Math.cos(ang+sp), q[1]-L*Math.sin(ang+sp));
+  ctx.closePath();
+}
+function drawAnn(a){
+  const w = strokePx(a.w), halo = w + Math.max(1.5, w*0.85);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  // halo under, colour over -- same two passes photos.py makes
+  for(const pass of [0,1]){
+    const paint = pass ? rgba(a.color) : HALO;
+    ctx.strokeStyle = paint; ctx.fillStyle = paint;
+    ctx.lineWidth = pass ? w : halo;
+    shapePath(a); ctx.stroke();
+    if(a.type === 'arrow'){ headPath(a, w); ctx.fill(); ctx.stroke(); }
+  }
+}
+function draw(){
+  const dpr = window.devicePixelRatio || 1;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cv.width/dpr,cv.height/dpr);
+  if(!img){
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--muted');
+    ctx.font = '14px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('Open content/<manual>/masters/', cv.width/dpr/2, cv.height/dpr/2);
+    return;
+  }
+  const f = fit(), c = C();
+  if(preview){
+    ctx.drawImage(img, c.x*img.width, c.y*img.height, c.w*img.width, c.h*img.height,
+                  f.ox, f.oy, f.dw, f.dh);
+  } else {
+    ctx.drawImage(img, f.ox, f.oy, f.dw, f.dh);
+    // everything outside the crop dimmed, so the frame reads at a glance
+    const a = toC([c.x, c.y]), b = toC([c.x+c.w, c.y+c.h]);
+    ctx.fillStyle = 'rgba(8,12,16,0.55)';
+    ctx.fillRect(f.ox, f.oy, f.dw, a[1]-f.oy);
+    ctx.fillRect(f.ox, b[1], f.dw, f.oy+f.dh-b[1]);
+    ctx.fillRect(f.ox, a[1], a[0]-f.ox, b[1]-a[1]);
+    ctx.fillRect(b[0], a[1], f.ox+f.dw-b[0], b[1]-a[1]);
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([6,4]); ctx.strokeRect(a[0], a[1], b[0]-a[0], b[1]-a[1]); ctx.setLineDash([]);
+  }
+  (cur ? cur.anns : []).forEach(drawAnn);
+  if(drag && drag.preview) drawAnn(drag.preview);
+}
+
+// ---------- input ----------
+function pos(e){
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  return [(e.clientX-r.left) * (cv.width/dpr) / r.width,
+          (e.clientY-r.top)  * (cv.height/dpr) / r.height];
+}
+const clamp01 = v => Math.min(1, Math.max(0, v));
+
+cv.addEventListener('pointerdown', e => {
+  if(!img || preview) return;
+  try { cv.setPointerCapture(e.pointerId); } catch(_){}
+  const n = toN(pos(e)).map(clamp01);
+  drag = {a:n, b:n, pts:[n]};
+  e.preventDefault();
+});
+cv.addEventListener('pointermove', e => {
+  if(!drag) return;
+  const n = toN(pos(e)).map(clamp01);
+  drag.b = n;
+  if(tool === 'pen'){
+    const last = drag.pts[drag.pts.length-1], f = fit();
+    // decimate: raw pointer events would put a few hundred points in the YAML
+    if(Math.hypot((n[0]-last[0])*f.dw, (n[1]-last[1])*f.dh) > 3) drag.pts.push(n);
+  }
+  drag.preview = shapeFromDrag();
+  draw();
+});
+cv.addEventListener('pointerup', () => {
+  if(!drag) return;
+  if(tool === 'crop'){
+    const x = Math.min(drag.a[0], drag.b[0]), y = Math.min(drag.a[1], drag.b[1]);
+    const w = Math.abs(drag.b[0]-drag.a[0]), h = Math.abs(drag.b[1]-drag.a[1]);
+    if(w > 0.02 && h > 0.02){ cur.crop = {x, y, w, h}; touch(); }
+  } else {
+    const s = shapeFromDrag();
+    if(s){ cur.anns.push(s); touch(); }
+  }
+  drag = null;
+  sync();
+});
+
+function shapeFromDrag(){
+  if(!drag) return null;
+  const {a, b} = drag, base = {color, w: wfrac};
+  if(tool === 'circle'){
+    const rx = Math.abs(b[0]-a[0])/2, ry = Math.abs(b[1]-a[1])/2;
+    if(rx < 0.004 || ry < 0.004) return null;
+    return Object.assign({type:'circle', c:[(a[0]+b[0])/2, (a[1]+b[1])/2], r:[rx, ry]}, base);
+  }
+  if(tool === 'arrow'){
+    if(Math.hypot(b[0]-a[0], b[1]-a[1]) < 0.01) return null;
+    return Object.assign({type:'arrow', a, b}, base);
+  }
+  if(tool === 'pen'){
+    if(drag.pts.length < 2) return null;
+    return Object.assign({type:'pen', pts: drag.pts.slice()}, base);
+  }
+  return null;
+}
+
+// ---------- yaml ----------
+const r4 = v => Math.round(v*1e4)/1e4;
+
+function entryYaml(master, e){
+  let s = '  - out: ' + (normOut(e.out) || 'photo.webp') + '\n    master: ' + master + '\n';
+  if(e.rotate) s += '    rotate: ' + e.rotate + '\n';
+  s += '    crop: [' + [e.crop.x, e.crop.y, e.crop.w, e.crop.h].map(r4).join(', ') + ']\n';
+  if(e.anns.length){
+    s += '    annotations:\n';
+    for(const a of e.anns){
+      // JSON flow style: valid YAML, and the Load box can JSON.parse it back
+      const o = {type:a.type};
+      if(a.type === 'circle'){ o.c = a.c.map(r4); o.r = a.r.map(r4); }
+      else if(a.type === 'pen'){ o.pts = a.pts.map(p => p.map(r4)); }
+      else { o.a = a.a.map(r4); o.b = a.b.map(r4); }
+      o.color = a.color;
+      if(Math.abs(a.w - DEFAULT_W) > 1e-9) o.w = a.w;
+      s += '      - ' + JSON.stringify(o) + '\n';
+    }
+  }
+  return s;
+}
+function included(){
+  return queue.map(f => f.name).filter(n => entries.get(n) && entries.get(n).include);
+}
+function yamlText(){
+  if(allMode){
+    const inc = included();
+    if(!inc.length) return '';
+    return '# Written by build/annotate.html. Coordinates are fractions of the\n' +
+           '# master, so a crop can move without the annotations sliding off.\n' +
+           'photos:\n' + inc.map(n => entryYaml(n, entries.get(n))).join('');
+  }
+  if(!cur) return '';
+  return entryYaml(queue[qi].name, cur);
+}
+
+// ---------- panels ----------
+function sync(){
+  draw();
+  $('#yaml').value = yamlText();
+  const n = included().length;
+  $('#yamlhint').innerHTML = allMode
+    ? (n ? 'Save as <code>content/&lt;manual&gt;/photos.yaml</code>, then <code>python build/build.py</code>.'
+         : 'Nothing included yet — crop or draw on a photo, or tick <b>include</b>.')
+    : 'Paste under <code>photos:</code> in an existing photos.yaml.';
+  $('#count').textContent = cur ? cur.anns.length : 0;
+  $('#empty').style.display = (cur && cur.anns.length) ? 'none' : '';
+  $('#inc').checked = !!(cur && cur.include);
+  $('#undo').disabled = !(cur && cur.anns.length);
+
+  const ul = $('#list'); ul.innerHTML = '';
+  (cur ? cur.anns : []).forEach((a, i) => {
+    const li = document.createElement('li');
+    const d = document.createElement('span');
+    d.className = 'dot'; d.style.background = rgba(a.color);
+    const k = document.createElement('span');
+    k.className = 'k';
+    k.textContent = a.type + (a.type === 'pen' ? ' (' + a.pts.length + ' pts)' : '');
+    const b = document.createElement('button');
+    b.textContent = '×'; b.title = 'Delete';
+    b.onclick = () => { cur.anns.splice(i,1); sync(); };
+    li.append(d, k, b); ul.append(li);
+  });
+
+  const q = $('#queue'); q.innerHTML = '';
+  queue.forEach((f, i) => {
+    const e = entries.get(f.name);
+    const li = document.createElement('li');
+    if(i === qi) li.className = 'cur';
+    const t = document.createElement('span');
+    t.className = 'tick'; t.textContent = (e && e.include) ? '✓' : '';
+    const k = document.createElement('span');
+    k.className = 'k'; k.textContent = f.name; k.title = f.name;
+    li.append(t, k);
+    li.onclick = () => go(i);
+    q.append(li);
+  });
+  $('#qempty').style.display = queue.length ? 'none' : '';
+  $('#qstat').textContent = queue.length ? (n + ' of ' + queue.length + ' included') : '';
+  $('#pos').textContent = queue.length ? (qi+1) + ' / ' + queue.length : '—';
+  $('#prevBtn').disabled = qi <= 0;
+  $('#nextBtn').disabled = qi < 0 || qi >= queue.length-1;
+  if(queue.length) q.querySelector('li.cur')?.scrollIntoView({block:'nearest'});
+  save();
+}
+
+function resize(){
+  const stage = $('#stage'), dpr = window.devicePixelRatio || 1;
+  const w = Math.max(320, stage.clientWidth - 20);
+  const h = Math.max(300, Math.min(window.innerHeight - 200, w * 0.72));
+  cv.width = w*dpr; cv.height = h*dpr;
+  cv.style.width = w+'px'; cv.style.height = h+'px';
+  draw();
+}
+window.addEventListener('resize', resize);
+
+// ---------- loading ----------
+function applyRotation(){
+  if(!srcImg || !cur) return;
+  const swap = cur.rotate === 90 || cur.rotate === 270;
+  const c = document.createElement('canvas');
+  c.width  = swap ? srcImg.height : srcImg.width;
+  c.height = swap ? srcImg.width  : srcImg.height;
+  const x = c.getContext('2d');
+  x.translate(c.width/2, c.height/2);
+  x.rotate(cur.rotate*Math.PI/180);
+  x.drawImage(srcImg, -srcImg.width/2, -srcImg.height/2);
+  img = c;
+  $('#dims').textContent = img.width + ' × ' + img.height +
+    (cur.rotate ? '  (rotated ' + cur.rotate + '°)' : '');
+  resize(); sync();
+}
+
+function go(i){
+  if(i < 0 || i >= queue.length) return;
+  qi = i;
+  const f = queue[i];
+  cur = entryFor(f.name);
+  $('#out').value = cur.out;
+  $('#mst').value = f.name;
+  preview = false; $('#prev').classList.remove('on'); cv.style.cursor = 'crosshair';
+  const my = ++token;
+  const im = new Image();
+  const url = URL.createObjectURL(f);
+  im.onload = () => {
+    URL.revokeObjectURL(url);
+    if(my !== token) return;   // a later go() already won
+    srcImg = im;
+    cv.classList.remove('empty');
+    applyRotation();
+  };
+  im.onerror = () => { URL.revokeObjectURL(url); if(my === token) warn('Could not read ' + f.name); };
+  im.src = url;
+  sync();
+}
+
+function warn(msg){
+  const w = $('#warn');
+  w.style.display = msg ? '' : 'none';
+  w.innerHTML = msg || '';
+}
+
+function setQueue(files, folderName){
+  const imgs = files.filter(f => /\.(webp|jpe?g|png|gif|bmp|tiff?)$/i.test(f.name));
+  const webp = imgs.filter(f => /\.webp$/i.test(f.name));
+  if(!imgs.length){ warn('No images in that folder.'); return; }
+  if(!webp.length){
+    // masters are always .webp -- anything else means they picked photos_raw/
+    warn('No <code>.webp</code> masters there — that looks like <code>photos_raw/</code>. ' +
+         'Run <code>python build/photos.py --ingest</code> first, then open ' +
+         '<code>masters/</code>. Annotating raws would put the coordinates on the ' +
+         'wrong image, because ingest rotates them upright.');
+    return;
+  }
+  queue = webp.sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric:true}));
+  folder = folderName || 'files';
+  fpKey = LSKEY + ':' + folder + ':' + fingerprint(queue.map(f => f.name));
+  entries = new Map();
+  const restored = restore();
+  go(0);
+
+  const msg = [];
+  if(webp.length < imgs.length)
+    msg.push('Skipped ' + (imgs.length - webp.length) + ' non-webp file(s) — only masters are annotated.');
+  if(restored)
+    msg.push('Restored ' + restored + ' unsaved entr' + (restored===1?'y':'ies') +
+             ' from this browser. Copy the YAML out when you\'re done — this is a crash net, not a save.');
+  warn(msg.join(' '));
+}
+
+$('#dir').addEventListener('change', e => {
+  const files = [...e.target.files];
+  const rel = files[0] && files[0].webkitRelativePath;
+  setQueue(files, rel ? rel.split('/')[0] : 'files');
+  e.target.value = '';
+});
+$('#file').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if(f) setQueue([f], 'single');
+  e.target.value = '';
+});
+
+// ---------- chrome ----------
+const colorbar = $('#colors');
+Object.keys(PALETTE).forEach((name, i) => {
+  const b = document.createElement('button');
+  b.className = 'sw' + (i === 0 ? ' on' : '');
+  b.style.background = rgba(name); b.dataset.color = name; b.title = name;
+  b.onclick = () => { color = name;
+    colorbar.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); };
+  colorbar.append(b);
+});
+$('#tools').onclick = e => {
+  const b = e.target.closest('button'); if(!b) return;
+  tool = b.dataset.tool;
+  $('#tools').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+};
+$('#widths').onclick = e => {
+  const b = e.target.closest('button'); if(!b) return;
+  wfrac = parseFloat(b.dataset.w);
+  $('#widths').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+};
+$('#prevBtn').onclick = () => go(qi-1);
+$('#nextBtn').onclick = () => go(qi+1);
+$('#rot').onclick = () => { if(srcImg && cur){ cur.rotate = (cur.rotate+90)%360; touch(); applyRotation(); } };
+$('#undo').onclick = () => { if(cur){ cur.anns.pop(); sync(); } };
+$('#resetcrop').onclick = () => { if(cur){ cur.crop = blank(); sync(); } };
+$('#inc').onchange = e => { if(cur){ cur.include = e.target.checked; sync(); } };
+$('#discard').onclick = () => {
+  if(queue.length && confirm('Throw away the crops and annotations for this folder?')) discard();
+};
+$('#out').oninput = () => { if(cur){ cur.out = $('#out').value.trim(); touch(); sync(); } };
+// on the way out, not on every keystroke -- normalising mid-type fights you
+$('#out').onblur = () => {
+  if(!cur) return;
+  cur.out = normOut(cur.out);
+  $('#out').value = cur.out;
+  sync();
+};
+$('#prev').onclick = () => {
+  preview = !preview;
+  $('#prev').classList.toggle('on', preview);
+  cv.style.cursor = preview ? 'default' : 'crosshair';
+  draw();
+};
+$('#modeAll').onclick = () => { allMode = true;
+  $('#modeAll').classList.add('on'); $('#modeOne').classList.remove('on'); sync(); };
+$('#modeOne').onclick = () => { allMode = false;
+  $('#modeOne').classList.add('on'); $('#modeAll').classList.remove('on'); sync(); };
+$('#copy').onclick = async () => {
+  try { await navigator.clipboard.writeText($('#yaml').value); }
+  catch(_){ $('#yaml').select(); document.execCommand('copy'); }
+  $('#copy').textContent = 'Copied';
+  setTimeout(() => { $('#copy').textContent = 'Copy'; }, 1200);
+};
+
+// Re-editing an existing file: paste it back. The annotations are JSON flow
+// style on purpose, so each one parses without a YAML library.
+$('#load').onclick = () => {
+  const txt = prompt('Paste photos.yaml (or one entry) to re-edit:');
+  if(!txt) return;
+  try {
+    // split on the "  - out:" that starts each entry
+    const blocks = txt.split(/\n(?=\s*-\s*out:)/).filter(b => /out:/.test(b));
+    let hit = 0;
+    for(const b of blocks){
+      const m = k => (b.match(new RegExp('^\\s*' + k + ':\\s*(.+)$', 'm')) || [])[1];
+      const master = (m('master') || '').trim();
+      if(!master) continue;
+      const e = entryFor(master);
+      e.out = (m('out') || e.out).trim();
+      e.rotate = parseInt(m('rotate') || '0', 10) % 360;
+      const c = m('crop');
+      if(c){ const v = JSON.parse(c.trim()); e.crop = {x:v[0], y:v[1], w:v[2], h:v[3]}; }
+      e.anns = (b.match(/^\s*-\s*\{.*\}\s*$/gm) || [])
+        .map(l => JSON.parse(l.replace(/^\s*-\s*/, '')))
+        .map(a => Object.assign({color:'amber', w:DEFAULT_W}, a));
+      e.include = true;
+      hit++;
+    }
+    if(!hit) return alert('No entries found in that text.');
+    if(qi >= 0){ cur = entryFor(queue[qi].name); $('#out').value = cur.out; applyRotation(); }
+    sync();
+    warn('Loaded ' + hit + ' entr' + (hit===1?'y':'ies') + ' from the paste.');
+  } catch(err){ alert('Could not parse that: ' + err.message); }
+};
+
+document.addEventListener('keydown', e => {
+  if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){
+    e.preventDefault(); if(cur){ cur.anns.pop(); sync(); } return;
+  }
+  if(e.key === 'ArrowLeft'){ e.preventDefault(); go(qi-1); return; }
+  if(e.key === 'ArrowRight'){ e.preventDefault(); go(qi+1); return; }
+  const k = e.key.toLowerCase();
+  const byKey = {'1':'crop','2':'circle','3':'pen','4':'arrow'};
+  if(byKey[k]) $('#tools').querySelector('[data-tool="'+byKey[k]+'"]').click();
+  else if(k === 'p') $('#prev').click();
+  else if(k === 'r') $('#rot').click();
+});
+
+resize(); sync();
+})();
+</script>
+</body>
+</html>

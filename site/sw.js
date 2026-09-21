@@ -1,9 +1,57 @@
-// Trailer Docs service worker -- offline shell for the hosted copy.
+// Trailer Docs service worker -- the whole point of the hosted copy.
 // The cache name carries the build version, so publishing a new version
 // installs a fresh cache and drops the old one.
-const CACHE = 'trailer-docs-1.2.0';
-const ASSETS = ['./', './index.html', './manifest.webmanifest',
-                './icon-180.png', './icon-192.png', './icon-512.png'];
+const CACHE = 'trailer-docs-1.3.0';
+
+// Every photo is precached at install, not lazily on first view: a phone that
+// installs at the office and then drives to a field with no signal has to have
+// all of them already. Photo URLs carry a content hash, so the ones that did
+// not change are served from the browser's own cache during this install.
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icon-180.png",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./photos/setup-32_amp_port.33434b3a.webp",
+  "./photos/setup-closed_side.89f2c7e3.webp",
+  "./photos/setup-corner_ratchet_flocked.288aada7.webp",
+  "./photos/setup-distro.1f4c7c09.webp",
+  "./photos/setup-distro_breakers.cb383c80.webp",
+  "./photos/setup-door_bolt.e8499eaf.webp",
+  "./photos/setup-door_frames.8908ef87.webp",
+  "./photos/setup-frame_20_espa.49874233.webp",
+  "./photos/setup-full_rig_oppen.aac55b59.webp",
+  "./photos/setup-green_pin.3eb9aec8.webp",
+  "./photos/setup-hydrolics_off.0625eb2a.webp",
+  "./photos/setup-left_side_unfurled.50907241.webp",
+  "./photos/setup-manual_overide.23ebf400.webp",
+  "./photos/setup-manual_override_pilons.3bf96723.webp",
+  "./photos/setup-multi-plug.3da03a75.webp",
+  "./photos/setup-opening_side_panel.ad92dfa9.webp",
+  "./photos/setup-plug_around_light.592e5448.webp",
+  "./photos/setup-red_cable_as_handle.e4ccc3d6.webp",
+  "./photos/setup-red_carabiner_attach_point.96ece61e.webp",
+  "./photos/setup-red_handle.0bb27d42.webp",
+  "./photos/setup-roof_up_side.60735cea.webp",
+  "./photos/setup-side_lowered.0f00ffb2.webp",
+  "./photos/setup-side_lowering.84bc3811.webp",
+  "./photos/setup-side_panel_open.d1a7c21d.webp",
+  "./photos/setup-side_pin_alignment.b9d5f96d.webp",
+  "./photos/setup-side_pin_out.6c1b39dd.webp",
+  "./photos/setup-sides_wall_open.6374ee5f.webp",
+  "./photos/setup-sny_kettle_around_light.82348310.webp",
+  "./photos/setup-sony_espa_powered_on.8aa79575.webp",
+  "./photos/setup-sony_power.dd5220e9.webp",
+  "./photos/setup-spring_bolt_under_side.1b68be75.webp",
+  "./photos/setup-spring_bolt_under_side_open.1ace01ea.webp",
+  "./photos/setup-support_leg.0197e30d.webp",
+  "./photos/setup-support_leg_attached.4edf2c12.webp",
+  "./photos/setup-wall_bolts.5b376f39.webp",
+  "./photos/setup-white_panel_bolt_closed.3e92959e.webp",
+  "./photos/setup-white_panel_bolt_open.57c3a463.webp"
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))

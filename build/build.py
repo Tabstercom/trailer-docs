@@ -1,29 +1,46 @@
 #!/usr/bin/env python3
 """
-Build the Trailer Docs single-file offline app.
+Build the Trailer Docs PWA.
 
-Reads:  content/<manual>/manual.md   (prose -> Guide / Illustrated)
+Reads:  content/<manual>/manual.md      (prose -> Guide / Illustrated)
         content/<manual>/checklist.yaml (condensed tick steps + reference cards)
-        content/<manual>/images/*        (inlined as base64 for offline use)
-        build/manuals.yaml               (master list + status)
-        VERSION                          (version number shown in the app)
+        content/<manual>/images/*       (rendered photos, see photos.py)
+        build/manuals.yaml              (master list + status)
+        VERSION                         (version number shown in the app)
 
-Writes: site/Trailer Docs.html          (one self-contained file)
+Writes: site/index.html                 (the app)
+        site/photos/*                   (content-hashed photos)
+        site/manifest.webmanifest, sw.js, icon-*.png
+
+Delivery is the hosted PWA only -- install it once with signal, then it runs
+with none. Photos are separate files rather than inlined base64: the app paints
+before they arrive, the browser caches them one by one, and the service worker
+precaches the lot at install so nothing is missing in the field.
 
 Usage:  python3 build/build.py
 """
-import os, re, json, base64, subprocess, mimetypes, html, sys
+import os, re, json, shutil, hashlib, subprocess, sys
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 SITE = os.path.join(ROOT, "site")
+PHOTOS_OUT = os.path.join(SITE, "photos")
 VERSION_FILE = os.path.join(ROOT, "VERSION")
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
     import yaml
 except ImportError:
     sys.exit("PyYAML required: pip install pyyaml")
+
+try:
+    from PIL import Image
+except ImportError:
+    sys.exit("Pillow required: pip install pillow")
+
+import photos as photolib
 
 
 def version():
@@ -40,13 +57,32 @@ def load_yaml(path):
         return yaml.safe_load(f) or {}
 
 
-def image_data_uri(path):
-    mime = mimetypes.guess_type(path)[0] or "image/jpeg"
-    with open(path, "rb") as f:
-        return f"data:{mime};base64," + base64.b64encode(f.read()).decode()
+def collect_photos(mid, d):
+    """images/<name> -> {file, data, w, h}, keyed by the name manual.md uses.
+
+    The published name carries a content hash. The service-worker cache is
+    keyed on VERSION, so without this every version bump would re-download
+    every photo; with it, an unchanged photo keeps its URL and stays cached.
+    """
+    out = {}
+    imgdir = os.path.join(d, "images")
+    if not os.path.isdir(imgdir):
+        return out
+    for fn in sorted(os.listdir(imgdir)):
+        fp = os.path.join(imgdir, fn)
+        if not os.path.isfile(fp) or fn.startswith("."):
+            continue
+        with open(fp, "rb") as f:
+            data = f.read()
+        with Image.open(fp) as im:
+            w, h = im.size
+        stem, ext = os.path.splitext(fn)
+        h8 = hashlib.sha1(data).hexdigest()[:8]
+        out[fn] = {"file": f"{mid}-{stem}.{h8}{ext}", "data": data, "w": w, "h": h}
+    return out
 
 
-def md_to_guide(mdpath, images):
+def md_to_guide(mdpath, photos, missing):
     """Markdown -> (guide_html, toc_list). Callout fenced divs -> styled callouts."""
     out = subprocess.run(
         ["pandoc", mdpath, "-f", "markdown+fenced_divs", "-t", "html", "--wrap=none"],
@@ -66,14 +102,20 @@ def md_to_guide(mdpath, images):
     body = re.sub(r'<div class="note">\s*',
                   lambda m: open_callout("note", "Note"), body)
 
-    # inline images as data URIs; tag them so Guide can hide them
+    # point <img> at the published photo; width/height stop lazy-loaded photos
+    # from shifting the text under your thumb as you scroll
     def repl_img(m):
-        src = m.group(1)
-        name = os.path.basename(src)
-        uri = images.get(name)
-        if not uri:
-            return ''  # missing image -> drop silently (photos come later)
-        return f'<img class="photo" src="{uri}" loading="lazy" alt="">'
+        tag, src = m.group(0), m.group(1)
+        rec = photos.get(os.path.basename(src))
+        if not rec:
+            missing.append((mdpath, src))
+            return tag
+        tag = tag.replace('src="%s"' % src, 'src="photos/%s"' % rec["file"])
+        tag = tag.replace(
+            '<img',
+            '<img class="photo" loading="lazy" decoding="async" '
+            'width="%d" height="%d"' % (rec["w"], rec["h"]), 1)
+        return tag
     body = re.sub(r'<img[^>]*src="([^"]+)"[^>]*/?>', repl_img, body)
 
     # strip any <strong> that pandoc left wrapping a heading
@@ -86,101 +128,26 @@ def md_to_guide(mdpath, images):
     return body, toc
 
 
-def build_manual(m):
+def build_manual(m, allphotos, missing):
     mid = m["id"]
     d = os.path.join(CONTENT, mid)
     if m.get("status") != "ready":
-        return {**m, "guide": "", "toc": [], "checklist": {"phases": [], "reference": []}}
+        return {**m, "guide": "", "toc": [], "hasPhotos": False,
+                "checklist": {"phases": [], "reference": []}}
 
-    # images
-    images = {}
-    imgdir = os.path.join(d, "images")
-    if os.path.isdir(imgdir):
-        for fn in sorted(os.listdir(imgdir)):
-            fp = os.path.join(imgdir, fn)
-            if os.path.isfile(fp):
-                images[fn] = image_data_uri(fp)
+    photos = collect_photos(mid, d)
+    allphotos.update({rec["file"]: rec["data"] for rec in photos.values()})
 
-    guide, toc = md_to_guide(os.path.join(d, "manual.md"), images)
+    guide, toc = md_to_guide(os.path.join(d, "manual.md"), photos, missing)
     cl = load_yaml(os.path.join(d, "checklist.yaml"))
     return {
         "id": mid, "title": m["title"], "subtitle": m["subtitle"],
         "status": "ready",
         "guide": guide, "toc": toc,
-        "hasPhotos": bool(images),
+        "hasPhotos": bool(photos),
         "checklist": {"phases": cl.get("phases", []), "reference": cl.get("reference", [])},
     }
 
-
-def step_text(st):
-    """A checklist step is a plain string or {t: "...", flag: imp|win}."""
-    if isinstance(st, dict):
-        return st.get("t", ""), st.get("flag", "")
-    return str(st), ""
-
-
-def static_fallback(manuals, build):
-    """Readable HTML for viewers that don't run JavaScript.
-
-    iOS previews an HTML attachment in Quick Look, which renders markup but
-    never executes scripts — without this the app paints nothing at all. The
-    real app overwrites #app on load, so this is only ever seen with JS off.
-    Photos are dropped: they'd double the file size for a fallback view.
-    """
-    parts = ['<div class="wrap nojs">',
-             '<div class="nojs-note"><b>Preview mode.</b> This page is being shown '
-             "without JavaScript, so the tabs and the tap-through checklist aren't "
-             'running — the full text of every manual is below. On iPhone, attachments '
-             'preview this way; open the file in a browser (or ask for the hosted link) '
-             'to get the app.</div>']
-
-    for m in manuals:
-        if m.get("status") != "ready":
-            continue
-        parts.append(f'<h2 class="nojs-title">{html.escape(m["title"])}</h2>')
-        parts.append(f'<p class="nojs-sub">{html.escape(m["subtitle"])}</p>')
-
-        guide = re.sub(r'<img[^>]*>', '', m.get("guide", ""))
-        parts.append(f'<div class="doc reading">{guide}</div>')
-
-        phases = m["checklist"].get("phases") or []
-        if phases:
-            parts.append('<h2 class="nojs-title">Checklist</h2>')
-            for ph in phases:
-                parts.append(f'<h3 class="nojs-phase">{html.escape(ph.get("title",""))}</h3><ul>')
-                for st in ph.get("steps", []):
-                    txt, flag = step_text(st)
-                    cls = ' class="imp"' if flag == "imp" else ''
-                    parts.append(f'<li{cls}>{txt}</li>')
-                parts.append('</ul>')
-
-        for card in (m["checklist"].get("reference") or []):
-            parts.append(f'<h3 class="nojs-phase">{html.escape(card.get("title",""))}</h3>'
-                         f'<div class="card">{card.get("body","")}</div>')
-
-    parts.append(f'<footer>Version {build["version"]} &middot; built {build["stamp"]}</footer>')
-    parts.append('</div>')
-    return "\n".join(parts)
-
-
-# ---------- PWA (hosted copy) ----------
-# The standalone file stays exactly as it was; these extras only apply to the
-# copy served over HTTPS, where a service worker can run. Installed to the home
-# screen, that copy works with no signal at all -- which is the whole point on
-# site.
-
-PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-180.png">
-"""
-
-PWA_SCRIPT = """<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
-  });
-}
-</script>
-"""
 
 MANIFEST = {
     "name": "Trailer Docs",
@@ -200,12 +167,16 @@ MANIFEST = {
     ],
 }
 
-SW_JS = """// Trailer Docs service worker -- offline shell for the hosted copy.
+SW_JS = """// Trailer Docs service worker -- the whole point of the hosted copy.
 // The cache name carries the build version, so publishing a new version
 // installs a fresh cache and drops the old one.
 const CACHE = 'trailer-docs-__VERSION__';
-const ASSETS = ['./', './index.html', './manifest.webmanifest',
-                './icon-180.png', './icon-192.png', './icon-512.png'];
+
+// Every photo is precached at install, not lazily on first view: a phone that
+// installs at the office and then drives to a field with no signal has to have
+// all of them already. Photo URLs carry a content hash, so the ones that did
+// not change are served from the browser's own cache during this install.
+const ASSETS = __ASSETS__;
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))
@@ -248,11 +219,7 @@ def write_icons(outdir):
     Drawn rather than shipped as binary so there's no image to keep in sync
     with the palette, and the bytes are identical build to build.
     """
-    try:
-        from PIL import Image, ImageDraw
-    except ImportError:
-        print("  (Pillow not installed - skipping icons)")
-        return
+    from PIL import ImageDraw
 
     for size in (180, 192, 512):
         img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
@@ -267,28 +234,50 @@ def write_icons(outdir):
         for p in (pts[0], pts[-1]):
             d.ellipse([p[0] - w / 2, p[1] - w / 2, p[0] + w / 2, p[1] + w / 2],
                       fill=(255, 255, 255, 255))
-        img.save(os.path.join(outdir, f"icon-{size}.png"), "PNG", optimize=True)
+        img.save(os.path.join(outdir, "icon-%d.png" % size), "PNG", optimize=True)
 
 
-def write_pwa(outdir, standalone_html, build):
-    """Write the hosted copy: index.html + manifest + service worker + icons."""
-    hosted = standalone_html.replace("</head>", PWA_HEAD + "</head>", 1)
-    hosted = hosted.replace("</body>", PWA_SCRIPT + "</body>", 1)
-    with open(os.path.join(outdir, "index.html"), "w", encoding="utf-8") as f:
-        f.write(hosted)
+def write_site(html_out, allphotos, build):
+    """index.html + photos + manifest + service worker + icons."""
+    os.makedirs(SITE, exist_ok=True)
 
-    with open(os.path.join(outdir, "manifest.webmanifest"), "w", encoding="utf-8") as f:
+    with open(os.path.join(SITE, "index.html"), "w", encoding="utf-8") as f:
+        f.write(html_out)
+
+    # rebuilt from scratch: hashed names would otherwise pile up build on build
+    shutil.rmtree(PHOTOS_OUT, ignore_errors=True)
+    os.makedirs(PHOTOS_OUT, exist_ok=True)
+    for name, data in sorted(allphotos.items()):
+        with open(os.path.join(PHOTOS_OUT, name), "wb") as f:
+            f.write(data)
+
+    with open(os.path.join(SITE, "manifest.webmanifest"), "w", encoding="utf-8") as f:
         json.dump(MANIFEST, f, indent=2)
 
-    with open(os.path.join(outdir, "sw.js"), "w", encoding="utf-8") as f:
-        f.write(SW_JS.replace("__VERSION__", build["version"]))
+    assets = (["./", "./index.html", "./manifest.webmanifest",
+               "./icon-180.png", "./icon-192.png", "./icon-512.png"]
+              + ["./photos/" + n for n in sorted(allphotos)])
+    sw = SW_JS.replace("__VERSION__", build["version"])
+    sw = sw.replace("__ASSETS__", json.dumps(assets, indent=2))
+    with open(os.path.join(SITE, "sw.js"), "w", encoding="utf-8") as f:
+        f.write(sw)
 
-    write_icons(outdir)
+    write_icons(SITE)
 
 
 def main():
+    photolib.run()
+
     cfg = load_yaml(os.path.join(ROOT, "build", "manuals.yaml"))
-    manuals = [build_manual(m) for m in cfg["manuals"]]
+    allphotos, missing = {}, []
+    manuals = [build_manual(m, allphotos, missing) for m in cfg["manuals"]]
+
+    if missing:
+        # Dropping these silently is how a photo disappears from the manual
+        # after a rename and nobody notices until they are on site.
+        lines = "\n".join("  %s: %s" % (os.path.relpath(p, ROOT), s) for p, s in missing)
+        sys.exit("missing photos referenced by manual.md:\n%s\n"
+                 "Run the photo pipeline, or fix the filename." % lines)
 
     now = datetime.now()
     build = {
@@ -304,19 +293,15 @@ def main():
     payload = ("window.MANUALS = " + data + ";" +
                "window.BUILD = " + json.dumps(build) + ";")
     html_out = tpl.replace("/*__DATA__*/", payload)
-    html_out = html_out.replace("<!--__STATIC__-->", static_fallback(manuals, build))
 
-    os.makedirs(SITE, exist_ok=True)
-    outpath = os.path.join(SITE, "Trailer Docs.html")
-    with open(outpath, "w", encoding="utf-8") as f:
-        f.write(html_out)
-    write_pwa(SITE, html_out, build)
+    write_site(html_out, allphotos, build)
 
-    kb = os.path.getsize(outpath) // 1024
+    kb = os.path.getsize(os.path.join(SITE, "index.html")) // 1024
+    pkb = sum(len(d) for d in allphotos.values()) // 1024
     ready = [m["id"] for m in manuals if m["status"] == "ready"]
-    print(f"built {outpath}  ({kb} KB)  v{build['version']}  {build['stamp']}  "
-          f"ready: {', '.join(ready)}")
-    print(f"       hosted copy: index.html + manifest + sw.js + icons in {SITE}")
+    print("built %s  v%s  %s" % (SITE, build["version"], build["stamp"]))
+    print("       index.html %d KB + %d photos %d KB" % (kb, len(allphotos), pkb))
+    print("       ready: %s" % ", ".join(ready))
 
 
 if __name__ == "__main__":
