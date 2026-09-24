@@ -8,13 +8,14 @@ phases:
       - Power everything down except the lights and breaker 2 (hydraulics battery).
       - Flip breakers 5 & 6 down (green).
       - Disconnect the two floor multi-plugs (the 16A single-phase ones), both sides.
-      - Unplug the plugs that power the frames and wrap each around a nearby light.
-      - Stow both floor multi-plugs in the large plastic tub.
       - Disconnect the 2 × Sony ESPA boxes; group the blue-tape DC cables in the tub.
       - Wrap each ESPA kettle lead around a nearby light.
       - Stow both Sony ESPA boxes and their power bricks in the tub.
+      - Unplug the plugs that power the frames and wrap each around a nearby light.
+      - Stow both floor multi-plugs in the large plastic tub.
       - "Frame 2: disconnect the Canon ESPA box and tuck its DC inputs up into the frame."
-      - Wrap its kettle lead around a light; stow the box and brick in the tub.
+      - "Frame 2 kettle lead is too short to reach a light — leave it hanging."
+      - Stow the Frame 2 box and brick in the tub.
       - Disconnect the under-mat trigger cable (frame 12 → 9) at one end; wrap it on a light.
       - Detach the frame 9 → LED Arduino trigger cable; wrap it by the Arduino.
       - {t: "Walk the rig — nothing left touching the floor. Zip-tie strays back on.", flag: imp}
@@ -27,16 +28,16 @@ phases:
       - {t: "Leave the bolt nearest the main PC (between frames 1 & 20) attached.", flag: imp}
       - Fold the screens into the bottom-row Canon zoom cameras.
       - Release every frame brake (black tab horizontal).
-      - "Right side: curl the rig into a thin <b>U</b>, walking frame 10 to the back."
-      - Wedge frame 10 under the black roof bar (look for the scratches).
+      - "Right side: curl the rig into a thin <b>U</b>, walking frame 11 to the back."
+      - Wedge frame 11 under the black roof bar (look for the scratches).
       - Check all wheels sit inside the purple floor tape.
       - Brake every wheel on the collapsed side.
-      - Link frame 10's two rear eyelets to the horizontal bar with 2 green-pin metal cables.
+      - Link frame 11's two rear eyelets to the horizontal bar with 2 green-pin metal cables.
+      - {t: "2 straps binding middle frame to outer frame — mid-frame, vertical bars only, firm not tight.", flag: imp}
       - "Left side: curl frame 12 around the middle into an inverted <b>J</b>."
       - Check the purple tape again, then brake every wheel.
-      - Ratchet the 4 corners to the floor loops, around at least 2 frames — very tight.
+      - {t: "2 more straps the same way on this side — vertical bars only.", flag: imp}
       - Link 2 green-pin cables per side, ceiling bar to the top of the outer frames.
-      - {t: "Untested: 4 straps per side binding middle frame to outer frame — firm, not tight.", flag: imp}
 
   - title: Tidy everything away
     steps:
@@ -49,6 +50,8 @@ phases:
       - Clip a grey dehumidifier to the middle of the outside of the rig, each side.
       - Stack the foam outside or by the stairs — not on either side of the trailer.
       - Final floor check — both side floors clear.
+      - "The 2 × 16A cables are still across the floor at this point — that's expected."
+      - {t: "Now everything's stowed: ratchet the 4 corners to the floor loops, around at least 2 frames — very tight.", flag: imp}
 
   - title: Cables & power — part one
     steps:
@@ -125,31 +128,32 @@ reference:
     body: |
       <p>Both floor multi-plugs &nbsp;·&nbsp; all blue-tape Sony DC cables (as a group).</p>
       <p>2 × Sony ESPA boxes + bricks &nbsp;·&nbsp; the Frame 2 Canon ESPA box + brick.</p>
-      <p class="muted">Kettle leads don't go in the tub — wrap each one around a nearby light.</p>
+      <p class="muted">Kettle leads don't go in the tub — wrap each one around a nearby light. The Frame 2 lead is too short to reach one; leave it hanging.</p>
   - title: Fold order
     body: |
-      <div class="row"><span class="lab">Right</span><span>Frame 10 to the back, wedged under the black roof bar → thin <b>U</b>.</span></div>
+      <div class="row"><span class="lab">Right</span><span>Frame 11 to the back, wedged under the black roof bar → thin <b>U</b>.</span></div>
       <div class="row"><span class="lab">Left</span><span>Frame 12 wraps right around the middle → inverted <b>J</b>.</span></div>
       <div class="row"><span class="lab">Both</span><span>All wheels inside the purple tape, then brakes on.</span></div>
       <p class="muted">Stuck? Check for a wire under a wheel; otherwise it's a floor bump — push it with a foot on the wheel bar.</p>
   - title: What holds the rig
     body: |
       <div class="row"><span class="lab">Floor bolt</span><span>The one at frames 1/20 by the main PC <b>stays in</b>.</span></div>
-      <div class="row"><span class="lab">Green pins</span><span>2 metal cables, frame 10 → horizontal bar.</span></div>
-      <div class="row"><span class="lab">Corners</span><span>4 ratchets, floor loop → top corner, ≥2 frames. Very tight.</span></div>
+      <div class="row"><span class="lab">Green pins</span><span>2 metal cables, frame 11 → horizontal bar.</span></div>
+      <div class="row"><span class="lab">Frames</span><span>2 ratchets per side, middle frame → outer frame. Mid-frame, <b>vertical bars only</b>. Firm.</span></div>
       <div class="row"><span class="lab">White pins</span><span>4 cables, ceiling bar → outer frame tops, 2 per side, near the middle.</span></div>
+      <div class="row"><span class="lab">Corners</span><span>4 ratchets, floor loop → top corner, ≥2 frames. Very tight — <b>last job, after tidying</b>.</span></div>
   - title: Manual override (raising)
     amber: true
     body: |
       <div class="row"><span class="lab">Rods</span><span>front = right side, back = left. Top raise / mid neutral / bottom lower.</span></div>
       <p>One pin <b>top</b>, the other neutral. Crank left→right ~5 min. Easy = right way; hard = wrong pin, stop and check.</p>
       <p class="muted">Check visually after ~10 cranks. Stop at resistance, then lock the two spring bolts.</p>
-  - title: Untested steps
+  - title: Frame-binding straps
     amber: true
     body: |
-      <p>The <b>frame-binding ratchet straps</b> (4 per side, middle frame to outer frame) have not been used on a real packdown yet.</p>
-      <p>Do them up firmly, but not tight enough to bend the frames or pull them out of position.</p>
-      <p class="muted">The 4 corner straps to the floor loops <em>are</em> tested — those go on very tight.</p>
+      <p><b>2 per side</b>, not 4 — middle frame bound to outer frame, positioned around the <b>middle of the frames</b>.</p>
+      <p>Catch the <b>vertical bars only</b>. Taking in the horizontals as well pulls the frames out of position.</p>
+      <p class="muted">Firm, but not tight enough to bend the frames. These are separate from the 4 corner straps, which go on very tight at the very end.</p>
   - title: Trailer keys
     body: |
       <p>Clear ziplock bag, inside the small white panel at the top of the stairs on the left (facing the trailer), by the door.</p>

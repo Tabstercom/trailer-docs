@@ -1,0 +1,127 @@
+# Written by build/annotate.html. Coordinates are fractions of the
+# master, so a crop can move without the annotations sliding off.
+photos:
+  - out: red_handle.webp
+    master: 20260914-085723.webp
+    crop: [0.0877, 0.1225, 0.7738, 0.7169]
+  - out: red_carabiner_attach_point.webp
+    master: 20260914-085729.webp
+    crop: [0.1639, 0.2974, 0.7484, 0.6234]
+  - out: red_cable_as_handle
+    master: 20260914-085756.webp
+    crop: [0.2332, 0.1416, 0.5128, 0.7481]
+  - out: side_pin_out
+    master: 20260914-085902.webp
+    crop: [0.284, 0.1468, 0.6006, 0.5974]
+  - out: spring_bolt_under_side
+    master: 20260914-085904.webp
+    crop: [0.2263, 0.2316, 0.6121, 0.6113]
+  - out: spring_bolt_under_side_open
+    master: 20260914-085907.webp
+    crop: [0.2632, 0.2818, 0.5243, 0.4017]
+  - out: closed_side
+    master: 20260914-090046.webp
+    crop: [0, 0, 1, 1]
+  - out: roof_up_side
+    master: 20260914-090138.webp
+    crop: [0, 0, 1, 1]
+  - out: opening_side_panel
+    master: 20260914-090156.webp
+    crop: [0.2609, 0.2247, 0.7391, 0.7706]
+  - out: side_panel_open
+    master: 20260914-090207.webp
+    crop: [0.1385, 0.1571, 0.8615, 0.8429]
+  - out: white_panel_bolt_closed
+    master: 20260914-090230.webp
+    crop: [0.0877, 0.2351, 0.9123, 0.5472]
+  - out: white_panel_bolt_open
+    master: 20260914-090235.webp
+    crop: [0.0322, 0.2974, 0.9678, 0.49]
+  - out: sides_wall_open
+    master: 20260914-090342.webp
+    crop: [0, 0, 1, 1]
+  - out: manual_overide
+    master: 20260914-090712.webp
+    crop: [0.2032, 0.0152, 0.5636, 0.6165]
+    annotations:
+      - {"type":"arrow","a":[0.5936,0.1571],"b":[0.5982,0.074],"color":"green","w":0.01}
+      - {"type":"arrow","a":[0.582,0.2385],"b":[0.5774,0.3147],"color":"green","w":0.01}
+      - {"type":"circle","c":[0.4376,0.1762],"r":[0.0728,0.0502],"color":"red","w":0.01}
+  - out: manual_override_pilons
+    master: 20260914-090804.webp
+    crop: [0.1939, 0.1918, 0.5151, 0.5558]
+    annotations:
+      - {"type":"arrow","a":[0.4688,0.5468],"b":[0.6351,0.5537],"color":"red","w":0.01}
+      - {"type":"arrow","a":[0.679,0.3407],"b":[0.5912,0.3424],"color":"red","w":0.01}
+  - out: side_lowering
+    master: 20260914-091035.webp
+    crop: [0.1893, 0.01, 0.8062, 0.9801]
+    annotations:
+      - {"type":"arrow","a":[0.5127,0.1675],"b":[0.381,0.8688],"color":"red","w":0.01}
+  - out: side_pin_alignment
+    master: 20260914-091157.webp
+    crop: [0.2679, 0.287, 0.4458, 0.3307]
+    annotations:
+      - {"type":"arrow","a":[0.4757,0.4221],"b":[0.4919,0.5519],"color":"red","w":0.01}
+  - out: side_lowered
+    master: 20260914-091645.webp
+    crop: [0.0121, 0.0169, 0.7679, 0.9831]
+  - out: 32_amp_port
+    master: 20260914-091817.webp
+    crop: [0.0946, 0.2351, 0.7992, 0.5645]
+  - out: hydrolics_off
+    master: 20260914-092029.webp
+    crop: [0.157, 0.1952, 0.7161, 0.6165]
+  - out: distro
+    master: 20260914-092104.webp
+    crop: [0, 0, 1, 1]
+  - out: distro_breakers
+    master: 20260914-092200.webp
+    crop: [0, 0, 1, 1]
+  - out: door_bolt
+    master: 20260914-092250.webp
+    crop: [0.1039, 0.2939, 0.7022, 0.497]
+  - out: wall_bolts
+    master: 20260914-092503.webp
+    crop: [0.0646, 0.1727, 0.9354, 0.6234]
+    annotations:
+      - {"type":"arrow","a":[0.291,0.6247],"b":[0.3025,0.3667],"color":"red","w":0.01}
+  - out: support_leg
+    master: 20260914-093151.webp
+    crop: [0.1708, 0.1606, 0.6653, 0.7048]
+  - out: support_leg_attached
+    master: 20260914-093245.webp
+    crop: [0.127, 0.216, 0.7623, 0.6961]
+  - out: corner_ratchet_flocked
+    master: 20260914-094011.webp
+    crop: [0.2078, 0.2697, 0.7692, 0.729]
+  - out: green_pin
+    master: 20260914-094019.webp
+    crop: [0.2655, 0.3528, 0.7276, 0.4121]
+  - out: left_side_unfurled
+    master: 20260914-104255.webp
+    crop: [0.0276, 0.0861, 0.8477, 0.8537]
+  - out: full_rig_oppen
+    master: 20260914-110307.webp
+    crop: [0.0045, 0.1069, 0.9955, 0.8931]
+  - out: door_frames
+    master: 20260914-110819.webp
+    crop: [0.157, 0.0792, 0.7784, 0.8693]
+  - out: plug_around_light
+    master: 20260914-111408.webp
+    crop: [0.0784, 0.0411, 0.9216, 0.8485]
+  - out: multi-plug
+    master: 20260914-111420.webp
+    crop: [0.1015, 0.0636, 0.8246, 0.8779]
+  - out: sony_power
+    master: 20260914-111949.webp
+    crop: [0.1316, 0.1641, 0.7738, 0.5887]
+  - out: frame_20_espa
+    master: 20260914-112302.webp
+    crop: [0.0669, 0.1658, 0.8939, 0.8017]
+  - out: sny_kettle_around_light
+    master: 20260914-112955.webp
+    crop: [0.127, 0.2524, 0.8662, 0.5437]
+  - out: sony_espa_powered_on
+    master: 20260914-113051.webp
+    crop: [0.0484, 0.1935, 0.9516, 0.6216]

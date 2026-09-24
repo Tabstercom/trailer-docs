@@ -233,9 +233,11 @@ Now the ceiling lights should be on and you can start expanding the rig.
 First, inspect the rig for any damage. If there is any, please let David or Theo know and we can advise.
 :::
 
-The rig will have been secured with ratchet straps and metal cables. There are four ratchet straps, one in each corner of the rig — undo them all and store them neatly in a corner.
+The rig will have been secured with ratchet straps and metal cables. Start with the four in the corners of the rig, one per corner — undo them all and store them neatly in a corner.
 
 ![corner ratchet straps](images/corner_ratchet_flocked.webp)
+
+There are four more straps binding the frames themselves together — two on each side, around the middle of the frames, wrapped around the vertical bars. Undo these as well and store them with the others.
 
 Next, find the metal cables that attach the rig to the ceiling bar. Unscrew the green pins to remove them, and try to keep the pins attached to the cable ends when storing.
 

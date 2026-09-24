@@ -69,7 +69,8 @@ phases:
   - title: Expand the rig
     steps:
       - {t: "Inspect the rig for damage; tell <b>David / Theo</b> if there is any.", flag: imp}
-      - Undo the 4 ratchet straps and store them in a corner.
+      - Undo the 4 corner ratchet straps and store them in a corner.
+      - Undo the 4 frame-binding straps (2 per side, around the middle of the frames).
       - Remove the ceiling cables (unscrew the green pins, keep pins on the cables).
       - Clear the packing foam into a corner.
       - Hang the dehumidifiers on the wall handles.

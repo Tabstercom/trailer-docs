@@ -9,19 +9,19 @@ If it hasn't been done already, power down everything on the trailer except the 
 
 When powering down, make sure breakers 5 and 6 are flipped down (green), then disconnect the two multi-plugs on the floor on both sides of the trailer — the ones that attach to the 16 amp single-phase cables. None of the frames should have power after this.
 
-1. Unplug everything attached to the now-disconnected multi-plugs. Wrap each plug and its cable (the ones that feed the frames' multi-plugs) around a nearby light, to keep them stowed neatly off the ground.
+1. Disconnect the 2 × Sony ESPA power boxes. Take all the DC power cables (the ones with blue tape, connecting the Sonys to the ESPA boxes) and store them as a group in the large plastic tub — it will probably be the one holding the FACS Sony lenses.
 
-2. Take the floor multi-plugs and stow them in the large plastic tub — it will probably be the one holding the FACS Sony lenses.
+2. Disconnect the kettle lead from each ESPA power brick and wrap it neatly around a nearby light.
 
-3. Disconnect the 2 × Sony ESPA power boxes. Take all the DC power cables (the ones with blue tape, connecting the Sonys to the ESPA boxes) and store them as a group in the plastic tub.
+3. Store both ESPA boxes and their power bricks in the plastic tub.
 
-4. Disconnect the kettle lead from each ESPA power brick and wrap it neatly around a nearby light.
+4. Unplug everything attached to the now-disconnected multi-plugs. Wrap each plug and its cable (the ones that feed the frames' multi-plugs) around a nearby light, to keep them stowed neatly off the ground.
 
-5. Store both ESPA boxes and their power bricks in the plastic tub.
+5. Take the floor multi-plugs and stow them in the plastic tub.
 
 6. Find the Canon ESPA box on Frame 2. Disconnect all its DC power inputs and tuck them up into the frame so they don't drag on the ground.
 
-7. Disconnect its kettle lead from its power brick and wrap it neatly around a nearby light.
+7. Disconnect its kettle lead from its power brick. This one is too short to reach a light, so just leave it hanging where it is.
 
 8. Store that ESPA box and its power brick in the plastic tub.
 
@@ -45,43 +45,35 @@ Walk around the rig and, for all the cameras on the bottom of the frames (the Ca
 Then walk around and release the brakes on all the frames by flicking the black plastic tab by the wheels so it is horizontal.
 
 ## Folding the right side
-Start with the right side. You are going to slowly curl the rig so that it becomes a thin "U" shape, which means moving frame 10 towards the back of the trailer.
+Start with the right side. You are going to slowly curl the rig so that it becomes a thin "U" shape, which means moving frame 11 towards the back of the trailer.
 
 Go slowly — move around and pull different frames so they all travel at a similar rate. You will meet resistance; if you do, check whether a wire has fallen under a wheel. If not, it's likely a wheel is up against one of the long bumps on the floor. The easiest way to move over the bumps is to change sides and push the frame with a foot, applying pressure to the metal bar with the wheels.
 
-Frame 10 should end up at the back of the trailer, wedged under the black bar running across the roof near the back. There is an obvious spot for it — you can see it in the scratches on the paintwork of the top bar.
+Frame 11 should end up at the back of the trailer, wedged under the black bar running across the roof near the back. There is an obvious spot for it — you can see it in the scratches on the paintwork of the top bar.
 
 Make sure the frames are compressed properly. Running down the length of the trailer floor there are patches of purple tape; use these as your marker. All the frame wheels should sit inside the tape, towards the centre of the trailer.
 
 Once this side has collapsed, walk around and apply the brake to every wheel on it.
 
-Find two of the metal cables with green pins — usually stored in a corner of the trailer. Head to frame 10 and find the two eyelets on the side of the frame closest to the back of the trailer. On the horizontal bar above there are another two eyelets. Connect each eyelet on frame 10 to the closest eyelet on the horizontal bar.
+Find two of the metal cables with green pins — usually stored in a corner of the trailer. Head to frame 11 and find the two eyelets on the side of the frame closest to the back of the trailer. On the horizontal bar above there are another two eyelets. Connect each eyelet on frame 11 to the closest eyelet on the horizontal bar.
 
 ::: note
 If the eyelets are too slack, you may be able to twist them and slide them along the metal — though some of them won't move.
 :::
 
-::: note
-The next step has not been tried on a real packdown yet, so it may need adjusting. If you do it, let David or Theo know how it went.
-:::
-
-Take 4 × ratchet straps and, at four points along the middle frame, wrap each one around both the inner frame and the outer frame to bind them together. Do this by wrapping the strap around the hinge point of two frames, trying to catch both the vertical and the horizontal bars on the middle and the outer frames. Do them up firmly, but not so tight that they bend the frames or pull them out of position. The point of these extra straps is to stop the middle frames moving so much in transit.
+Take 2 × ratchet straps and wrap each one around both the inner frame and the outer frame to bind them together. Put them around the middle of the frames, and catch **only the vertical bars** — taking in the horizontal bars as well pulls the frames out of position. Do them up firmly, but not so tight that they bend the frames. The point of these extra straps is to stop the middle frames moving so much in transit.
 
 ## Folding the left side
 Now collapse the left side of the trailer. Again, go slowly, pulling and pushing different sections to spread the force. This side curls around the middle frames: frame 12 will end up wrapped all the way around the middle and over to the right side of the trailer, like an inverted "J".
 
 Once again, make sure all the frames are inside the purple tape, then go around and apply the brakes to every wheel.
 
-::: note
-This step has not been tried on a real packdown yet either.
-:::
+Take another 2 × ratchet straps and wrap them around the middle of the outer and inner frames to bind them together, exactly as you did on the other side — vertical bars only. Again, make sure they aren't so tight that they bend the frames in towards each other.
 
-Take another 4 × ratchet straps and, at four points along the outer left frame, wrap each one around the outer and inner frame to bind them together, exactly as you did on the other side. Again, make sure they aren't so tight that they bend the frames in towards each other.
+## Cabling the rig to the ceiling
+Find 4 × white cables with green pins and use two on each side. Look for the eyelets in the grey aluminium bars running along the trailer's ceiling from back to front; there are corresponding eyelets on the top of the outer frames. Connect two on each side, preferably near the middle — the corner ratchet straps hold the corners, and they go on at the very end of the packdown.
 
-## Strapping the rig down
-Take 4 × ratchet straps and, in each corner of the rig, find the metal loop in the floor — these are the mount points for the straps. Thread a strap through each loop and wrap it around the top corner of the rig, trying to get it around at least two frames to bind them. These can be done up very tight.
-
-Find 4 × white cables with green pins and use two on each side. Look for the eyelets in the grey aluminium bars running along the trailer's ceiling from back to front; there are corresponding eyelets on the top of the outer frames. Connect two on each side, preferably near the middle, as the ratchet straps are already holding the corners. Some of the eyelets can be moved along the metal by unscrewing them slightly and sliding them, but again, not all of them will.
+Some of the eyelets can be moved along the metal by unscrewing them slightly and sliding them, but again, not all of them will.
 
 # Tidying Everything Away
 Now the rig is closed, it's time to tidy and store all the non-rig items away.
@@ -103,6 +95,15 @@ Now the rig is closed, it's time to tidy and store all the non-rig items away.
 8. Stack all the foam either outside or by the stairs — somewhere accessible that isn't on either side of the trailer, as you will need it once the first side panels are down.
 
 9. Do a final inspection of the floor: everything should have a place, and the side floors should be clear.
+
+::: note
+The 2 × 16 amp cables will still be running across the floor at this point — that's expected. They get pulled back through and stowed in the next section.
+:::
+
+## Strapping the rig down
+Now that everything is stowed and nothing is left to move around the rig, put the corner straps on. Leaving them until last means you aren't working over them while you tidy.
+
+Take 4 × ratchet straps and, in each corner of the rig, find the metal loop in the floor — these are the mount points for the straps. Thread a strap through each loop and wrap it around the top corner of the rig, trying to get it around at least two frames to bind them. These can be done up very tight.
 
 # Storing Cables and Power — Part One
 Head outside to the ends of your 2 × 16 amp cables. If they aren't already unplugged, remove them from the distro box or power source (or from the extensions, if you are using them).
