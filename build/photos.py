@@ -308,6 +308,37 @@ def render_manual(mid, d, force=False):
     return n
 
 
+def _count(d, sub, pat=None):
+    p = os.path.join(d, sub)
+    if not os.path.isdir(p):
+        return 0
+    return len([f for f in os.listdir(p)
+                if not f.startswith(".") and os.path.isfile(os.path.join(p, f))
+                and (pat is None or f.lower().endswith(pat))])
+
+
+def report(only=None):
+    """Where each manual's photos have got to, and what to do next.
+
+    "nothing to do" on its own reads like a failure when you have just
+    dropped 50 photos in -- it usually means they were already ingested.
+    """
+    for mid, d in manual_dirs(only):
+        raw = _count(d, "photos_raw")
+        mst = _count(d, "masters", ".webp")
+        img = _count(d, "images", ".webp")
+        if not (raw or mst or img):
+            continue
+        spec = os.path.exists(os.path.join(d, "photos.yaml"))
+        bits = ["%d raw" % raw, "%d master%s" % (mst, "" if mst == 1 else "s")]
+        if spec:
+            bits.append("%d rendered" % img)
+            nxt = "" if img else "  -> photos.yaml has no entries yet"
+        else:
+            nxt = "  -> no photos.yaml: annotate masters/ in build/annotate.html"
+        print("  %-10s %s%s" % (mid, ", ".join(bits), nxt))
+
+
 def run(only=None, force=False, ingest_only=False):
     ing = ren = 0
     for mid, d in manual_dirs(only):
@@ -327,7 +358,8 @@ def main():
     a = ap.parse_args()
     ing, ren = run(a.manual, a.force, a.ingest)
     if not ing and not ren:
-        print("photos: nothing to do")
+        print("photos: everything already up to date")
+    report(a.manual)
 
 
 if __name__ == "__main__":
